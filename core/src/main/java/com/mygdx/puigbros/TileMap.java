@@ -11,7 +11,7 @@ public class TileMap {
     int width;
     int height;
     byte tiles[][];
-    Texture tileTexture[];
+    Texture tileTexture[], bgTexture;
     SpriteBatch batch;
 
     public int scrollX;
@@ -24,12 +24,14 @@ public class TileMap {
 
     public void loadTextures()
     {
-        tileTexture = new Texture[18];
+        tileTexture = new Texture[19];
 
-        for(int i = 0; i < 18; i++)
+        for(int i = 1; i < 19; i++)
         {
-            tileTexture[i] = new Texture("tiles/"+(i+1)+".png");
+            tileTexture[i] = new Texture("tiles/"+i+".png");
         }
+
+        bgTexture = new Texture("BG.png");
     }
 
     void loadFromLevel(Level l)
@@ -68,6 +70,16 @@ public class TileMap {
         shapeRenderer.end();*/
 
         batch.begin();
+
+        // Parallax scroll
+        int bgWidth = bgTexture.getWidth();
+        int bgHeight = bgTexture.getHeight();
+        int scrollXPos = 0 - ((scrollX/2) % bgWidth);
+
+        batch.draw(bgTexture, scrollXPos, 0, bgWidth, bgHeight, 0, 0, bgWidth, bgHeight, false, true);
+        batch.draw(bgTexture, scrollXPos + bgWidth, 0, bgWidth, bgHeight, 0, 0, bgWidth, bgHeight, false, true);
+
+
         for(int j = 0; j < height; j++)
             for(int i = 0; i < width; i++)
             {
