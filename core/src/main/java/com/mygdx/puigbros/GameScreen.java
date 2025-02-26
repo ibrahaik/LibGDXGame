@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,11 @@ public class GameScreen implements Screen {
         player.setMap(tileMap);
         player.setJoypad(joypad);
         stage.addActor(player);
+
+        Viewport viewport = new Viewport() {
+        };
+        viewport.setCamera(game.camera);
+        stage.setViewport(viewport);
 
         Json json = new Json();
 
@@ -89,11 +95,11 @@ public class GameScreen implements Screen {
         game.shapeRenderer.line(0,0,800,480);
         game.shapeRenderer.end();*/
         tileMap.render(/*game.shapeRenderer*/);
-        stage.draw();
         player.drawDebug(game.shapeRenderer);
         for (int i = 0; i < enemies.size(); i++)
             enemies.get(i).drawDebug(game.shapeRenderer);
         joypad.render(game.shapeRenderer);
+        stage.draw();
 
         // Update step =============================================
         stage.act(delta);
