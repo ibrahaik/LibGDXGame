@@ -1,0 +1,23 @@
+package com.mygdx.puigbros;
+
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.awt.Rectangle;
+
+public class GameEntity extends Actor {
+
+    public Vector2 speed;
+    public GameEntity()
+    {
+        speed = new Vector2(0,0);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        moveBy(delta*speed.x, delta* speed.y);
+    }
+}
