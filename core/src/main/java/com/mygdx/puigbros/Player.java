@@ -14,6 +14,9 @@ public class Player extends WalkingCharacter {
     Joypad joypad;
 
     Texture idleTextures[];
+    Texture runTextures[];
+    Texture jumpTextures[];
+    Texture currentFrame;
 
     float animationFrame = 0;
     boolean lookLeft = false;
@@ -32,6 +35,22 @@ public class Player extends WalkingCharacter {
         {
             idleTextures[i] = new Texture("player/Idle (" +(i+1)+").png");
         }
+
+        runTextures = new Texture[8];
+
+        for (int i = 0; i < 8; i++)
+        {
+            runTextures[i] = new Texture("player/Run (" +(i+1)+").png");
+        }
+
+        jumpTextures = new Texture[12];
+
+        for (int i = 0; i < 12; i++)
+        {
+            jumpTextures[i] = new Texture("player/Jump (" +(i+1)+").png");
+        }
+
+        currentFrame = idleTextures[0];
     }
 
     public void setJoypad(Joypad joypad) {
@@ -41,8 +60,37 @@ public class Player extends WalkingCharacter {
     public void act(float delta) {
         super.act(delta);
 
-        animationFrame += 10 * delta;
-        if (animationFrame >= 10.f) animationFrame -= 10.f;
+        if(falling)
+        {
+            if(speed.y < 0)
+            {
+                animationFrame = 0 + (-speed.y / 16);
+                if (animationFrame > 8) animationFrame = 8;
+            }
+            else
+            {
+                animationFrame = 9 + (speed.y / 16);
+                if (animationFrame > 11) animationFrame = 11;
+            }
+            currentFrame = jumpTextures[(int)animationFrame];
+
+        }
+        else if((speed.x < 0.1f && speed.x > -0.1f))
+        {
+            // Idle
+            animationFrame += 10 * delta;
+            if (animationFrame >= 10.f) animationFrame -= 10.f;
+            currentFrame = idleTextures[(int)animationFrame];
+        }
+        else
+        {
+            // Walk
+            animationFrame += 10 * delta;
+            if (animationFrame >= 8.f) animationFrame -= 8.f;
+            currentFrame = runTextures[(int)animationFrame];
+        }
+
+
 
         if(getX() < getWidth() / 2)
         {
@@ -76,7 +124,7 @@ public class Player extends WalkingCharacter {
             }
             else
             {
-                speed.x *= 1 - (0.9f*delta);
+                speed.x *= 1 - (0.99f*delta);
             }
         }
     }
@@ -85,7 +133,8 @@ public class Player extends WalkingCharacter {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        batch.draw(idleTextures[(int)animationFrame], getX() - getWidth()*0.5f - map.scrollX - 42, getY() - getHeight()*0.5f + 16, 128, 128, 0, 0, 669, 569, lookLeft, true);
+
+        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - 42, getY() - getHeight()*0.5f + 16, 128, 128, 0, 0, 669, 569, lookLeft, true);
     }
 
     public void drawDebug(ShapeRenderer shapes) {
