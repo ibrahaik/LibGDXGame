@@ -20,6 +20,7 @@ public class Joypad implements InputProcessor {
         Rectangle rect;
         String action;
         boolean pressed;
+        int pushes;
 
 
         Button(int x, int y, int sx, int sy, String action)
@@ -27,6 +28,7 @@ public class Joypad implements InputProcessor {
             rect = new Rectangle(x, y, sx, sy);
             this.action = action;
             pressed = false;
+            pushes = 0;
         }
     }
 
@@ -56,6 +58,20 @@ public class Joypad implements InputProcessor {
             return buttons.get(action).pressed;
         else
             return false;
+    }
+
+    boolean consumePush(String action)
+    {
+        if(buttons.get(action) != null)
+        {
+            if(buttons.get(action).pushes > 0)
+            {
+                buttons.get(action).pushes = 0;
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public void render(ShapeRenderer shapeRenderer)
@@ -102,6 +118,7 @@ public class Joypad implements InputProcessor {
             {
                 pointers.put(pointer,buttons.get(i));
                 buttons.get(i).pressed = true;
+                buttons.get(i).pushes ++;
             }
         }
 

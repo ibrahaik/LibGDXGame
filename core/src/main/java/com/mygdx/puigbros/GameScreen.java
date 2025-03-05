@@ -94,9 +94,9 @@ public class GameScreen implements Screen {
         game.shapeRenderer.line(0,0,800,480);
         game.shapeRenderer.end();*/
         tileMap.render(/*game.shapeRenderer*/);
-        player.drawDebug(game.shapeRenderer);
-        for (int i = 0; i < enemies.size(); i++)
-            enemies.get(i).drawDebug(game.shapeRenderer);
+        //player.drawDebug(game.shapeRenderer);
+        //for (int i = 0; i < enemies.size(); i++)
+        //    enemies.get(i).drawDebug(game.shapeRenderer);
         joypad.render(game.shapeRenderer);
         stage.draw();
 
@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
             Rectangle rect_enemy = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
 
             WalkingCharacter wc = (WalkingCharacter) enemy;
-            if(!wc.isDead())
+            if(!player.isDead() && !wc.isDead())
             {
                 if(rect_enemy.overlaps(rect_player))
                 {

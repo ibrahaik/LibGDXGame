@@ -116,7 +116,7 @@ public class Player extends WalkingCharacter {
                 currentFrame = runTextures[(int)animationFrame];
             }
 
-            if(!falling && joypad.isPressed("Jump"))
+            if(!falling && joypad.consumePush("Jump"))
             {
                 jump();
             }

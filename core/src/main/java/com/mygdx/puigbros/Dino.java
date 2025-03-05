@@ -20,7 +20,7 @@ public class Dino extends WalkingCharacter
 
     public Dino(int x, int y)
     {
-        setBounds(x,y,64, 64);
+        setBounds(x,y,64, 116);
         loadTextures();
     }
 
@@ -49,13 +49,17 @@ public class Dino extends WalkingCharacter
 
         if(dead)
         {
+            animationFrame += delta * 6.f;
+            if(animationFrame >= 8.f)
+                animationFrame = 7.f;
+            currentFrame = deadTextures[(int)animationFrame];
 
         }
         else if(!falling)
         {
-            animationFrame += delta * 4.f;
+            animationFrame += delta * 6.f;
             if(animationFrame >= 10.f)
-                animationFrame = 9.f;
+                animationFrame -= 10.f;
             currentFrame = walkTextures[(int)animationFrame];
 
             if(lookRight)
@@ -102,7 +106,7 @@ public class Dino extends WalkingCharacter
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookRight ? 28 : 50), getY() - getHeight()*0.5f, 128, 128, 0, 0, 669, 569, !lookRight, true);
+        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookRight ? 12 : 44), getY() - getHeight()*0.5f, 128, 128, 0, 0, 680, 472, !lookRight, true);
     }
 
     @Override
