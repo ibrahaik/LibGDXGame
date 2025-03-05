@@ -13,6 +13,7 @@ public class WalkingCharacter extends GameEntity {
     TileMap map;
 
     protected boolean falling;
+    protected boolean dead;
 
     public void setMap(TileMap map) {
         this.map = map;
@@ -22,6 +23,7 @@ public class WalkingCharacter extends GameEntity {
     {
         super();
         falling = false;
+        dead = false;
     }
 
     @Override
@@ -104,5 +106,18 @@ public class WalkingCharacter extends GameEntity {
         shapes.setColor(Color.NAVY);
         shapes.rect(getX() - getWidth()*0.5f - map.scrollX, getY() - getHeight()*0.5f, getWidth(), getHeight());
         shapes.end();
+    }
+
+    public void kill()
+    {
+        dead = true;
+    }
+
+    public boolean isFalling() {
+        return falling;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }

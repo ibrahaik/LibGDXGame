@@ -20,4 +20,8 @@ public class GameEntity extends Actor {
 
         moveBy(delta*speed.x, delta* speed.y);
     }
+
+    public Vector2 getSpeed() {
+        return speed;
+    }
 }

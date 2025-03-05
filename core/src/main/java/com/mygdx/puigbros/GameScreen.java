@@ -1,11 +1,10 @@
 package com.mygdx.puigbros;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
@@ -61,9 +60,9 @@ public class GameScreen implements Screen {
         for(int i = 0; i < l.getEnemies().size(); i++)
         {
             Enemy e = l.getEnemies().get(i);
-            if(e.getType().equals("Turtle"))
+            if(e.getType().equals("Dino"))
             {
-                Turtle t = new Turtle(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE);
+                Dino t = new Dino(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE);
                 t.setMap(tileMap);
                 enemies.add(t);
                 stage.addActor(t);
@@ -108,6 +107,33 @@ public class GameScreen implements Screen {
             tileMap.scrollX = 0;
         if(tileMap.scrollX >= tileMap.width * tileMap.TILE_SIZE - 800)
             tileMap.scrollX = tileMap.width * tileMap.TILE_SIZE - 800 - 1;
+
+        Rectangle rect_player = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+
+        for (int i = 0; i < enemies.size(); i++)
+        {
+            Actor enemy = enemies.get(i);
+            Rectangle rect_enemy = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+
+            WalkingCharacter wc = (WalkingCharacter) enemy;
+            if(!wc.isDead())
+            {
+                if(rect_enemy.overlaps(rect_player))
+                {
+                    if(player.getY() < wc.getY() && player.isFalling() && player.getSpeed().y > 0.f)
+                    {
+                        player.jump();
+                        wc.kill();
+                    }
+                    else
+                    {
+                        player.kill();
+                    }
+
+                }
+            }
+        }
+
 
     }
 

@@ -16,6 +16,7 @@ public class Player extends WalkingCharacter {
     Texture idleTextures[];
     Texture runTextures[];
     Texture jumpTextures[];
+    Texture deadTextures[];
     Texture currentFrame;
 
     float animationFrame = 0;
@@ -23,7 +24,7 @@ public class Player extends WalkingCharacter {
 
     public Player()
     {
-        setBounds(400,40,64, 128);
+        setBounds(400,40,48, 112);
         loadTextures();
     }
 
@@ -50,6 +51,13 @@ public class Player extends WalkingCharacter {
             jumpTextures[i] = new Texture("player/Jump (" +(i+1)+").png");
         }
 
+        deadTextures = new Texture[10];
+
+        for (int i = 0; i < 10; i++)
+        {
+            deadTextures[i] = new Texture("player/Dead (" +(i+1)+").png");
+        }
+
         currentFrame = idleTextures[0];
     }
 
@@ -60,72 +68,93 @@ public class Player extends WalkingCharacter {
     public void act(float delta) {
         super.act(delta);
 
-        if(falling)
-        {
-            if(speed.y < 0)
-            {
-                animationFrame = 0 + (-speed.y / 16);
-                if (animationFrame > 8) animationFrame = 8;
-            }
-            else
-            {
-                animationFrame = 9 + (speed.y / 16);
-                if (animationFrame > 11) animationFrame = 11;
-            }
-            currentFrame = jumpTextures[(int)animationFrame];
-
-        }
-        else if((speed.x < 0.1f && speed.x > -0.1f))
-        {
-            // Idle
-            animationFrame += 10 * delta;
-            if (animationFrame >= 10.f) animationFrame -= 10.f;
-            currentFrame = idleTextures[(int)animationFrame];
-        }
-        else
-        {
-            // Walk
-            animationFrame += 10 * delta;
-            if (animationFrame >= 8.f) animationFrame -= 8.f;
-            currentFrame = runTextures[(int)animationFrame];
-        }
-
-
-
         if(getX() < getWidth() / 2)
         {
             setX(getWidth() / 2);
         }
 
-        if(!falling && joypad.isPressed("Jump"))
+        if(dead)
         {
-            speed.y = JUMP_IMPULSE;
-        }
-
-        if(!falling)
-        {
-            if(joypad.isPressed("Right"))
+            animationFrame += 10.f*delta;
+            if(animationFrame >= 10.f)
             {
-                lookLeft = false;
-                speed.x += RUN_ACCELERATION * delta;
-                if(speed.x > RUN_SPEED)
-                {
-                    speed.x = RUN_SPEED;
-                }
+                animationFrame = 9.f;
             }
-            else if(joypad.isPressed("Left"))
+            currentFrame = deadTextures[(int)animationFrame];
+        }
+        else
+        {
+            if(falling)
             {
-                lookLeft = true;
-                speed.x -= RUN_ACCELERATION * delta;
-                if(speed.x < -RUN_SPEED)
+                if(speed.y < 0)
                 {
-                    speed.x = -RUN_SPEED;
+                    float base_impulse = -JUMP_IMPULSE;
+                    float current_impulse = -speed.y;
+                    animationFrame = 0 + ((base_impulse - current_impulse) / 32);
+                    if (animationFrame > 8) animationFrame = 8;
                 }
+                else
+                {
+                    animationFrame = 9 + (speed.y / 64);
+                    if (animationFrame > 11) animationFrame = 11;
+                }
+                currentFrame = jumpTextures[(int)animationFrame];
+
+            }
+            else if((speed.x < 0.1f && speed.x > -0.1f))
+            {
+                // Idle
+                animationFrame += 10 * delta;
+                if (animationFrame >= 10.f) animationFrame -= 10.f;
+                currentFrame = idleTextures[(int)animationFrame];
             }
             else
             {
-                speed.x *= 1 - (0.99f*delta);
+                // Walk
+                animationFrame += 10 * delta;
+                if (animationFrame >= 8.f) animationFrame -= 8.f;
+                currentFrame = runTextures[(int)animationFrame];
             }
+
+            if(!falling && joypad.isPressed("Jump"))
+            {
+                jump();
+            }
+
+            if(!falling) {
+                if (joypad.isPressed("Right")) {
+                    lookLeft = false;
+                    speed.x += RUN_ACCELERATION * delta;
+                    if (speed.x > RUN_SPEED) {
+                        speed.x = RUN_SPEED;
+                    }
+                } else if (joypad.isPressed("Left")) {
+                    lookLeft = true;
+                    speed.x -= RUN_ACCELERATION * delta;
+                    if (speed.x < -RUN_SPEED) {
+                        speed.x = -RUN_SPEED;
+                    }
+                } else {
+                    speed.x *= 1 - (0.99f * delta);
+                    if (speed.x < 5f && speed.x >= -5f) {
+                        speed.x = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    public void jump()
+    {
+        speed.y = JUMP_IMPULSE;
+    }
+
+    @Override
+    public void kill()
+    {
+        if(!dead) {
+            super.kill();
+            animationFrame = 0;
         }
     }
 
@@ -134,7 +163,7 @@ public class Player extends WalkingCharacter {
         super.draw(batch, parentAlpha);
 
 
-        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - 42, getY() - getHeight()*0.5f + 16, 128, 128, 0, 0, 669, 569, lookLeft, true);
+        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookLeft ? 28 : 50), getY() - getHeight()*0.5f, 128, 128, 0, 0, 669, 569, lookLeft, true);
     }
 
     public void drawDebug(ShapeRenderer shapes) {
