@@ -1,4 +1,4 @@
-package com.mygdx.puigbros;
+package com.mygdx.puigbros.jsonloaders;
 
 import java.util.ArrayList;
 

@@ -1,5 +1,6 @@
 package com.mygdx.puigbros;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,56 +10,23 @@ public class Player extends WalkingCharacter {
 
     static final float JUMP_IMPULSE = -400f;
     static final float RUN_SPEED = 240f;
+    static final float STOP_SPEED = 5f;
     static final float RUN_ACCELERATION = 200f;
 
+    AssetManager manager;
     Joypad joypad;
 
-    Texture idleTextures[];
-    Texture runTextures[];
-    Texture jumpTextures[];
-    Texture deadTextures[];
     Texture currentFrame;
 
     float animationFrame = 0;
     boolean lookLeft = false;
 
-    public Player()
+    public Player(AssetManager manager)
     {
         setBounds(400,40,48, 112);
-        loadTextures();
-    }
+        this.manager = manager;
+        currentFrame = manager.get("player/Idle (1).png", Texture.class);
 
-    public void loadTextures()
-    {
-        idleTextures = new Texture[10];
-
-        for (int i = 0; i < 10; i++)
-        {
-            idleTextures[i] = new Texture("player/Idle (" +(i+1)+").png");
-        }
-
-        runTextures = new Texture[8];
-
-        for (int i = 0; i < 8; i++)
-        {
-            runTextures[i] = new Texture("player/Run (" +(i+1)+").png");
-        }
-
-        jumpTextures = new Texture[12];
-
-        for (int i = 0; i < 12; i++)
-        {
-            jumpTextures[i] = new Texture("player/Jump (" +(i+1)+").png");
-        }
-
-        deadTextures = new Texture[10];
-
-        for (int i = 0; i < 10; i++)
-        {
-            deadTextures[i] = new Texture("player/Dead (" +(i+1)+").png");
-        }
-
-        currentFrame = idleTextures[0];
     }
 
     public void setJoypad(Joypad joypad) {
@@ -76,11 +44,15 @@ public class Player extends WalkingCharacter {
         if(dead)
         {
             animationFrame += 10.f*delta;
-            if(animationFrame >= 10.f)
-            {
-                animationFrame = 9.f;
+            int frameTexture = (int)animationFrame+1;
+            if(frameTexture > 10)
+                frameTexture = 10;
+            currentFrame = manager.get("player/Dead ("+frameTexture+").png", Texture.class);
+
+            speed.x *= 1 - (0.99f * delta);
+            if (speed.x < STOP_SPEED && speed.x >= -STOP_SPEED) {
+                speed.x = 0;
             }
-            currentFrame = deadTextures[(int)animationFrame];
         }
         else
         {
@@ -98,7 +70,8 @@ public class Player extends WalkingCharacter {
                     animationFrame = 9 + (speed.y / 64);
                     if (animationFrame > 11) animationFrame = 11;
                 }
-                currentFrame = jumpTextures[(int)animationFrame];
+                currentFrame = manager.get("player/Jump ("+(int)(animationFrame+1)+").png", Texture.class);
+
 
             }
             else if((speed.x < 0.1f && speed.x > -0.1f))
@@ -106,14 +79,16 @@ public class Player extends WalkingCharacter {
                 // Idle
                 animationFrame += 10 * delta;
                 if (animationFrame >= 10.f) animationFrame -= 10.f;
-                currentFrame = idleTextures[(int)animationFrame];
+                currentFrame = manager.get("player/Idle ("+(int)(animationFrame+1)+").png", Texture.class);
+
             }
             else
             {
                 // Walk
                 animationFrame += 10 * delta;
                 if (animationFrame >= 8.f) animationFrame -= 8.f;
-                currentFrame = runTextures[(int)animationFrame];
+                currentFrame = manager.get("player/Run ("+(int)(animationFrame+1)+").png", Texture.class);
+
             }
 
             if(!falling && joypad.consumePush("Jump"))
@@ -136,7 +111,7 @@ public class Player extends WalkingCharacter {
                     }
                 } else {
                     speed.x *= 1 - (0.99f * delta);
-                    if (speed.x < 5f && speed.x >= -5f) {
+                    if (speed.x < STOP_SPEED && speed.x >= -STOP_SPEED) {
                         speed.x = 0;
                     }
                 }
@@ -156,6 +131,11 @@ public class Player extends WalkingCharacter {
             super.kill();
             animationFrame = 0;
         }
+    }
+
+    float getAnimationFrame()
+    {
+        return animationFrame;
     }
 
     @Override

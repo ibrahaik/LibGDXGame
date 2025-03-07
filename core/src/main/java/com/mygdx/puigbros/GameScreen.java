@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.puigbros.jsonloaders.Enemy;
+import com.mygdx.puigbros.jsonloaders.Level;
 
 import java.util.ArrayList;
 
@@ -37,9 +39,9 @@ public class GameScreen implements Screen {
         joypad.addButton(100,280, 60, 60, "Up");
         joypad.addButton(700,340, 60, 60, "Jump");
 
-        tileMap = new TileMap(game.batch);
+        tileMap = new TileMap(game.manager, game.batch);
         stage = new Stage();
-        player = new Player();
+        player = new Player(game.manager);
         enemies = new ArrayList<>();
         player.setMap(tileMap);
         player.setJoypad(joypad);
@@ -62,10 +64,10 @@ public class GameScreen implements Screen {
             Enemy e = l.getEnemies().get(i);
             if(e.getType().equals("Dino"))
             {
-                Dino t = new Dino(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE);
-                t.setMap(tileMap);
-                enemies.add(t);
-                stage.addActor(t);
+                Dino d = new Dino(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE, game.manager, player);
+                d.setMap(tileMap);
+                enemies.add(d);
+                stage.addActor(d);
             }
         }
     }
@@ -134,7 +136,12 @@ public class GameScreen implements Screen {
             }
         }
 
-
+        // Lose life
+        if(player.isDead() && player.getAnimationFrame() >= 25.f)
+        {
+            game.setScreen(new GameScreen(game));
+            this.dispose();
+        }
     }
 
     @Override

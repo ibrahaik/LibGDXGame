@@ -1,5 +1,6 @@
 package com.mygdx.puigbros;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -12,47 +13,41 @@ public class Dino extends WalkingCharacter
     static final float RUN_ACCELERATION = 200f;
     boolean lookRight = false;
 
-    Texture[] walkTextures;
-    Texture[] deadTextures;
+    AssetManager manager;
     Texture currentFrame;
+    Player player;
 
     float animationFrame = 0;
 
-    public Dino(int x, int y)
+    public Dino(int x, int y, AssetManager manager, Player player)
     {
         setBounds(x,y,64, 116);
-        loadTextures();
-    }
-
-    void loadTextures()
-    {
-        walkTextures = new Texture[10];
-
-        for (int i = 0; i < 10; i++)
-        {
-            walkTextures[i] = new Texture("dino/Walk (" +(i+1)+").png");
-        }
-
-        deadTextures = new Texture[8];
-
-        for (int i = 0; i < 8; i++)
-        {
-            deadTextures[i] = new Texture("dino/Dead (" +(i+1)+").png");
-        }
-
-        currentFrame = walkTextures[0];
+        this.manager = manager;
+        this.player = player;
+        currentFrame = manager.get("dino/Walk (1).png", Texture.class);
     }
 
     @Override
     public void act(float delta) {
+
+        if(Math.abs(player.getX() - getX()) > 500) return;
+
         super.act(delta);
 
         if(dead)
         {
             animationFrame += delta * 6.f;
-            if(animationFrame >= 8.f)
-                animationFrame = 7.f;
-            currentFrame = deadTextures[(int)animationFrame];
+            int textureFrame = (int) animationFrame+1;
+            if(textureFrame >= 9)
+                textureFrame = 8;
+            currentFrame = manager.get("dino/Dead ("+textureFrame+").png", Texture.class);
+
+            speed.x = 0f;
+
+            if(animationFrame >= 15)
+            {
+                this.remove();
+            }
 
         }
         else if(!falling)
@@ -60,7 +55,7 @@ public class Dino extends WalkingCharacter
             animationFrame += delta * 6.f;
             if(animationFrame >= 10.f)
                 animationFrame -= 10.f;
-            currentFrame = walkTextures[(int)animationFrame];
+            currentFrame = manager.get("dino/Walk ("+(int)(animationFrame+1)+").png", Texture.class);
 
             if(lookRight)
             {
@@ -92,7 +87,7 @@ public class Dino extends WalkingCharacter
         }
         else
         {
-            currentFrame = walkTextures[0];
+            currentFrame = manager.get("dino/Walk (1).png", Texture.class);
         }
     }
 

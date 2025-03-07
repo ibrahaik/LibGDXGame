@@ -1,9 +1,9 @@
 package com.mygdx.puigbros;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Affine2;
+import com.mygdx.puigbros.jsonloaders.Level;
 
 public class TileMap {
 
@@ -11,27 +11,15 @@ public class TileMap {
     int width;
     int height;
     byte tiles[][];
-    Texture tileTexture[], bgTexture;
+    AssetManager manager;
     SpriteBatch batch;
 
     public int scrollX;
 
-    public TileMap(SpriteBatch batch)
+    public TileMap(AssetManager manager, SpriteBatch batch)
     {
+        this.manager = manager;
         this.batch = batch;
-        loadTextures();
-    }
-
-    public void loadTextures()
-    {
-        tileTexture = new Texture[19];
-
-        for(int i = 1; i < 19; i++)
-        {
-            tileTexture[i] = new Texture("tiles/"+i+".png");
-        }
-
-        bgTexture = new Texture("BG.png");
     }
 
     void loadFromLevel(Level l)
@@ -71,6 +59,7 @@ public class TileMap {
 
         batch.begin();
 
+        Texture bgTexture = manager.get("BG.png", Texture.class);
         // Parallax scroll
         int bgWidth = bgTexture.getWidth();
         int bgHeight = bgTexture.getHeight();
@@ -85,7 +74,7 @@ public class TileMap {
             {
                 if(tiles[j][i] != 0)
                 {
-                    batch.draw(tileTexture[tiles[j][i]], TILE_SIZE * i - scrollX, TILE_SIZE * j, TILE_SIZE, TILE_SIZE, 0, 0, 128, 128, false, true);
+                    batch.draw(manager.get("tiles/"+tiles[j][i]+".png", Texture.class), TILE_SIZE * i - scrollX, TILE_SIZE * j, TILE_SIZE, TILE_SIZE, 0, 0, 128, 128, false, true);
                 }
             }
         batch.end();
