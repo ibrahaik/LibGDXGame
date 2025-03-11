@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Create joypad
-        joypad = new ButtonLayout(game.camera);
+        joypad = new ButtonLayout(game.camera, game.manager);
         joypad.loadFromJson("joypad.json");
         /*joypad.addButton(40,340, 60, 60, "Left");
         joypad.addButton(160,340, 60, 60, "Right");
@@ -87,9 +87,9 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(Color.SKY);
 
         game.batch.setProjectionMatrix(game.camera.combined);
-        game.batch.begin();
+        //game.batch.begin();
         //game.batch.draw(game.img, 0, 0);
-        game.batch.end();
+        //game.batch.end();
 
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
         /*game.shapeRenderer.begin();
@@ -100,8 +100,8 @@ public class GameScreen implements Screen {
         //player.drawDebug(game.shapeRenderer);
         //for (int i = 0; i < enemies.size(); i++)
         //    enemies.get(i).drawDebug(game.shapeRenderer);
-        joypad.render(game.shapeRenderer);
         stage.draw();
+        joypad.render(game.batch);
 
         game.textBatch.begin();
         game.smallFont.draw(game.textBatch, "Lifes: " + game.lifes, -360,200);

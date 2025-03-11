@@ -58,7 +58,7 @@ public class PuigBros extends Game {
         loadAssets();
 
         lifes = 3;
-		setScreen(new GameScreen(this));
+		setScreen(new MainMenuScreen(this));
 	}
 
     void loadAssets()
@@ -66,6 +66,17 @@ public class PuigBros extends Game {
         for(int i = 1; i < 19; i++)
             manager.load("tiles/"+i+".png", Texture.class);
         manager.load("BG.png", Texture.class);
+
+        //GUI
+        manager.load("gui/Button-off.png", Texture.class);
+        manager.load("gui/Button-on.png", Texture.class);
+        manager.load("gui/Left-off.png", Texture.class);
+        manager.load("gui/Left-on.png", Texture.class);
+        manager.load("gui/Right-off.png", Texture.class);
+        manager.load("gui/Right-on.png", Texture.class);
+        manager.load("gui/Jump-off.png", Texture.class);
+        manager.load("gui/Jump-on.png", Texture.class);
+
 
         // Player
         for (int i = 0; i < 10; i++)

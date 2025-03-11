@@ -6,27 +6,17 @@
       width: 60
       height: 60,
       action: Left
+      "image_on": "gui/Left-on.png",
+      "image_off": "gui/Left-off.png"
     },
     {
       x: 160
       y: 340
       width: 60
-      height: 60,
-      action: Right
-    },
-    {
-      x: 100
-      y: 400
-      width: 60
       height: 60
-      action: Down
-    },
-    {
-      x: 100
-      y: 280
-      width: 60
-      height: 60
-      action: Up
+      "action": Right
+      "image_on": "gui/Right-on.png",
+      "image_off": "gui/Right-off.png"
     },
     {
       x: 700
@@ -34,6 +24,8 @@
       width: 60
       height: 60
       action: Jump
+      "image_on": "gui/Jump-on.png",
+      "image_off": "gui/Jump-off.png"
     }
   ]
 }
