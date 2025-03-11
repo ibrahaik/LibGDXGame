@@ -2,38 +2,62 @@ package com.mygdx.puigbros;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class PuigBros extends Game {
-	public SpriteBatch batch;
+	public SpriteBatch batch, textBatch;
 	public ShapeRenderer shapeRenderer;
+    BitmapFont smallFont;
 	Texture img;
-	public OrthographicCamera camera;
+	public OrthographicCamera camera, textCamera;
     AssetManager manager;
+
+    int lifes;
 
 
 	@Override
 	public void create () {
         manager = new AssetManager();
 		batch = new SpriteBatch();
+        textBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setAutoShapeType(true);
+
+        FreeTypeFontGenerator generator = new
+            FreeTypeFontGenerator(Gdx.files.internal("Dogfiles.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter params = new
+            FreeTypeFontGenerator.FreeTypeFontParameter();
+        params.size = 42;
+        params.borderWidth = 4;
+        params.borderColor = Color.BLACK;
+        params.color = Color.WHITE;
+        smallFont = generator.generateFont(params); // font size 22 pixels
 
 		img = new Texture("libgdx.png");
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 800, 480);
 
+        textCamera = new OrthographicCamera();
+        textCamera.setToOrtho(false, 800, 480);
+        textCamera.translate(-400,-240);
+
         batch.setProjectionMatrix(camera.projection);
+        textBatch.setProjectionMatrix(textCamera.projection);
 
         loadAssets();
 
+        lifes = 3;
 		setScreen(new GameScreen(this));
 	}
 

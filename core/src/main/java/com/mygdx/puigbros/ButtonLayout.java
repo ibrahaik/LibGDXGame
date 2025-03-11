@@ -1,19 +1,21 @@
 package com.mygdx.puigbros;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Json;
+import com.mygdx.puigbros.jsonloaders.ButtonJson;
+import com.mygdx.puigbros.jsonloaders.ButtonLayoutJson;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Joypad implements InputProcessor {
+public class ButtonLayout implements InputProcessor {
 
     class Button {
 
@@ -36,13 +38,27 @@ public class Joypad implements InputProcessor {
     Map<Integer,Button> pointers;
     final OrthographicCamera camera;
 
-    public Joypad(OrthographicCamera camera)
+    public ButtonLayout(OrthographicCamera camera)
     {
         this.camera = camera;
         buttons = new HashMap<>();
         pointers = new HashMap<>();
 
         Gdx.input.setInputProcessor(this);
+
+    }
+
+    public void loadFromJson(String fileName)
+    {
+        Json json = new Json();
+        FileHandle file = Gdx.files.internal(fileName);
+        String fileText = file.readString();
+        ButtonLayoutJson l = json.fromJson(ButtonLayoutJson.class, fileText);
+
+        for(ButtonJson b : l.buttons)
+        {
+            addButton(b.x, b.y, b.width, b.height, b.action);
+        }
 
     }
 

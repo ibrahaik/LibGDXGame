@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 public class WalkingCharacter extends GameEntity {
 
     static final float GRAVITY = 400.f;
-    TileMap map;
+    protected TileMap map;
 
     protected boolean falling;
     protected boolean dead;

@@ -2,19 +2,19 @@ package com.mygdx.puigbros.jsonloaders;
 
 import java.util.ArrayList;
 
-public class Level
+public class LevelJson
 {
     private int mapWidth;
     private int mapHeight;
 
     private byte tileMap[][];
 
-    private ArrayList<Enemy> enemies;
+    private ArrayList<EnemyJson> enemies;
 
-    public Level() {
+    public LevelJson() {
     }
 
-    public Level(int mapWidth, int mapHeight, byte[][] tileMap)
+    public LevelJson(int mapWidth, int mapHeight, byte[][] tileMap)
     {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -47,15 +47,15 @@ public class Level
         this.tileMap = tileMap;
     }
 
-    public ArrayList<Enemy> getEnemies() {
+    public ArrayList<EnemyJson> getEnemies() {
         return enemies;
     }
 
-    public void setEnemies(ArrayList<Enemy> enemies) {
+    public void setEnemies(ArrayList<EnemyJson> enemies) {
         this.enemies = enemies;
     }
 
-    public void addEnemy(Enemy e)
+    public void addEnemy(EnemyJson e)
     {
         enemies.add(e);
     }

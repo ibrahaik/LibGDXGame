@@ -14,7 +14,7 @@ public class Player extends WalkingCharacter {
     static final float RUN_ACCELERATION = 200f;
 
     AssetManager manager;
-    Joypad joypad;
+    ButtonLayout joypad;
 
     Texture currentFrame;
 
@@ -29,12 +29,17 @@ public class Player extends WalkingCharacter {
 
     }
 
-    public void setJoypad(Joypad joypad) {
+    public void setJoypad(ButtonLayout joypad) {
         this.joypad = joypad;
     }
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        if(getY() > map.height * TileMap.TILE_SIZE)
+        {
+            kill();
+        }
 
         if(getX() < getWidth() / 2)
         {

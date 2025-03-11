@@ -10,15 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.puigbros.jsonloaders.Enemy;
-import com.mygdx.puigbros.jsonloaders.Level;
+import com.mygdx.puigbros.jsonloaders.EnemyJson;
+import com.mygdx.puigbros.jsonloaders.LevelJson;
 
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
     PuigBros game;
-    Joypad joypad;
+    ButtonLayout joypad;
 
     Stage stage;
     TileMap tileMap;
@@ -32,12 +32,13 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Create joypad
-        joypad = new Joypad(game.camera);
-        joypad.addButton(40,340, 60, 60, "Left");
+        joypad = new ButtonLayout(game.camera);
+        joypad.loadFromJson("joypad.json");
+        /*joypad.addButton(40,340, 60, 60, "Left");
         joypad.addButton(160,340, 60, 60, "Right");
         joypad.addButton(100,400, 60, 60, "Down");
         joypad.addButton(100,280, 60, 60, "Up");
-        joypad.addButton(700,340, 60, 60, "Jump");
+        joypad.addButton(700,340, 60, 60, "Jump");*/
 
         tileMap = new TileMap(game.manager, game.batch);
         stage = new Stage();
@@ -56,12 +57,12 @@ public class GameScreen implements Screen {
 
         FileHandle file = Gdx.files.internal("Level.json");
         String scores = file.readString();
-        Level l = json.fromJson(Level.class, scores);
+        LevelJson l = json.fromJson(LevelJson.class, scores);
         tileMap.loadFromLevel(l);
 
         for(int i = 0; i < l.getEnemies().size(); i++)
         {
-            Enemy e = l.getEnemies().get(i);
+            EnemyJson e = l.getEnemies().get(i);
             if(e.getType().equals("Dino"))
             {
                 Dino d = new Dino(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE, game.manager, player);
@@ -102,6 +103,10 @@ public class GameScreen implements Screen {
         joypad.render(game.shapeRenderer);
         stage.draw();
 
+        game.textBatch.begin();
+        game.smallFont.draw(game.textBatch, "Lifes: " + game.lifes, -360,200);
+        game.textBatch.end();
+
         // Update step =============================================
         stage.act(delta);
         tileMap.scrollX = (int)(player.getX() - 400);
@@ -139,6 +144,7 @@ public class GameScreen implements Screen {
         // Lose life
         if(player.isDead() && player.getAnimationFrame() >= 25.f)
         {
+            game.lifes--;
             game.setScreen(new GameScreen(game));
             this.dispose();
         }

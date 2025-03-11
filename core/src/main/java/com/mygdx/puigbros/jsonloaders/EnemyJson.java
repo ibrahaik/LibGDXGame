@@ -1,16 +1,16 @@
 package com.mygdx.puigbros.jsonloaders;
 
-public class Enemy
+public class EnemyJson
 {
     private int x;
     private int y;
     private String type;
 
-    public Enemy()
+    public EnemyJson()
     {
 
     }
-    public Enemy(int x, int y, String type) {
+    public EnemyJson(int x, int y, String type) {
         this.x = x;
         this.y = y;
         this.type = type;

@@ -3,7 +3,7 @@ package com.mygdx.puigbros;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.puigbros.jsonloaders.Level;
+import com.mygdx.puigbros.jsonloaders.LevelJson;
 
 public class TileMap {
 
@@ -22,7 +22,7 @@ public class TileMap {
         this.batch = batch;
     }
 
-    void loadFromLevel(Level l)
+    void loadFromLevel(LevelJson l)
     {
         width = l.getMapWidth();
         height = l.getMapHeight();
@@ -90,7 +90,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        return tiles[mapY][mapX] != 0;
+        return tiles[mapY][mapX] != 0 && tiles[mapY][mapX] < 17;
     }
 
     int nearestFloor(int x, int y)
@@ -103,7 +103,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        while(mapY < height && tiles[mapY][mapX] == 0)
+        while(mapY < height && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 17))
         {
             mapY++;
         }
@@ -128,7 +128,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        while(mapY >= 0 && tiles[mapY][mapX] == 0)
+        while(mapY >= 0 && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 17))
         {
             mapY--;
         }

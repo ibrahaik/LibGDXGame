@@ -1,0 +1,39 @@
+{
+  "buttons" : [
+    {
+      x: 40
+      y: 340
+      width: 60
+      height: 60,
+      action: Left
+    },
+    {
+      x: 160
+      y: 340
+      width: 60
+      height: 60,
+      action: Right
+    },
+    {
+      x: 100
+      y: 400
+      width: 60
+      height: 60
+      action: Down
+    },
+    {
+      x: 100
+      y: 280
+      width: 60
+      height: 60
+      action: Up
+    },
+    {
+      x: 700
+      y: 340
+      width: 60
+      height: 60
+      action: Jump
+    }
+  ]
+}
