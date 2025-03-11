@@ -13,7 +13,7 @@ public class MainMenuScreen implements Screen
     {
         this.game = game;
 
-        mainMenu = new ButtonLayout(game.camera, game.manager);
+        mainMenu = new ButtonLayout(game.camera, game.manager, game.smallFont);
         mainMenu.loadFromJson("mainmenu.json");
     }
 
@@ -27,13 +27,25 @@ public class MainMenuScreen implements Screen
 
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
+        game.textBatch.setProjectionMatrix(game.textCamera.combined);
 
         game.batch.begin();
         game.batch.draw(game.manager.get("BG.png", Texture.class), 0, 0, 800, 480, 0,0, 1000, 750, false, true);
         game.batch.end();
 
-        mainMenu.render(game.batch);
+        game.textBatch.begin();
+        game.bigFont.draw(game.textBatch,"SUPER PUIG BROS.", 30, 480 - 60);
+        game.textBatch.end();
 
+        mainMenu.render(game.batch, game.textBatch);
+
+
+        if(mainMenu.consumePush("Start"))
+        {
+            game.lifes = 3;
+            game.setScreen(new GameScreen(game));
+            this.dispose();
+        }
     }
 
     @Override

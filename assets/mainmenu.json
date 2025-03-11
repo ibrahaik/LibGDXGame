@@ -2,12 +2,12 @@
   "buttons": [
     {
       x: 200
-      y: 120
+      y: 160
       width: 400
       height: 200
       action: Start
-      "text": "Start the game!"
-      "image_on": "gui/Button-on.png",
+      "text": "Start game!"
+      "image_on": "gui/Button-on.png"
       "image_off": "gui/Button-off.png"
     }
   ]

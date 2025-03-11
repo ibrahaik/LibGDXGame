@@ -7,6 +7,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,15 +26,17 @@ public class ButtonLayout implements InputProcessor {
 
         Rectangle rect;
         String action;
+        String text;
         String imageOn, imageOff;
         boolean pressed;
         int pushes;
 
 
-        Button(int x, int y, int sx, int sy, String action, String on, String off)
+        Button(int x, int y, int sx, int sy, String action, String text, String on, String off)
         {
             rect = new Rectangle(x, y, sx, sy);
             this.action = action;
+            this.text = text;
             this.imageOn = on;
             this.imageOff = off;
             pressed = false;
@@ -44,11 +48,13 @@ public class ButtonLayout implements InputProcessor {
     Map<Integer,Button> pointers;
     final OrthographicCamera camera;
     AssetManager manager;
+    BitmapFont font;
 
-    public ButtonLayout(OrthographicCamera camera, AssetManager manager)
+    public ButtonLayout(OrthographicCamera camera, AssetManager manager, BitmapFont font)
     {
         this.camera = camera;
         this.manager = manager;
+        this.font = font;
         buttons = new HashMap<>();
         pointers = new HashMap<>();
 
@@ -65,14 +71,14 @@ public class ButtonLayout implements InputProcessor {
 
         for(ButtonJson b : l.buttons)
         {
-            addButton(b.x, b.y, b.width, b.height, b.action, b.image_on, b.image_off);
+            addButton(b.x, b.y, b.width, b.height, b.action, b.text, b.image_on, b.image_off);
         }
 
     }
 
-    public void addButton(int x, int y, int sx, int sy, String action, String imageOn, String imageOff)
+    public void addButton(int x, int y, int sx, int sy, String action, String text, String imageOn, String imageOff)
     {
-        Button b = new Button(x, y, sx, sy, action, imageOn, imageOff);
+        Button b = new Button(x, y, sx, sy, action, text, imageOn, imageOff);
         buttons.put(action, b);
     }
 
@@ -113,17 +119,31 @@ public class ButtonLayout implements InputProcessor {
         shapeRenderer.end();
     }
 
-    public void render(SpriteBatch batch)
+    public void render(SpriteBatch spriteBatch, SpriteBatch textBatch)
     {
-        batch.begin();
-
+        spriteBatch.begin();
         for(String i:buttons.keySet())
         {
             Button b = buttons.get(i);
             Texture t = manager.get(b.pressed ? b.imageOn : b.imageOff, Texture.class);
-            batch.draw(t, b.rect.x, b.rect.y, b.rect.width, b.rect.height, 0, 0, t.getWidth(), t.getHeight(), false, true);
+            spriteBatch.draw(t, b.rect.x, b.rect.y, b.rect.width, b.rect.height, 0, 0, t.getWidth(), t.getHeight(), false, true);
+
         }
-        batch.end();
+        spriteBatch.end();
+
+        textBatch.begin();
+        for(String i:buttons.keySet())
+        {
+            Button b = buttons.get(i);
+
+            if(b.text != null) {
+
+                GlyphLayout glyphLayout = new GlyphLayout();
+                glyphLayout.setText(font, b.text);
+                font.draw(textBatch, glyphLayout, b.rect.x + (b.rect.width - glyphLayout.width) / 2f, 480 - (b.rect.y + (b.rect.height - glyphLayout.height) / 2f));
+            }
+        }
+        textBatch.end();
     }
 
     @Override

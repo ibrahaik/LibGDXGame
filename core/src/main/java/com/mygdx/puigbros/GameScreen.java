@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Create joypad
-        joypad = new ButtonLayout(game.camera, game.manager);
+        joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("joypad.json");
         /*joypad.addButton(40,340, 60, 60, "Left");
         joypad.addButton(160,340, 60, 60, "Right");
@@ -101,10 +101,10 @@ public class GameScreen implements Screen {
         //for (int i = 0; i < enemies.size(); i++)
         //    enemies.get(i).drawDebug(game.shapeRenderer);
         stage.draw();
-        joypad.render(game.batch);
+        joypad.render(game.batch, game.textBatch);
 
         game.textBatch.begin();
-        game.smallFont.draw(game.textBatch, "Lifes: " + game.lifes, -360,200);
+        game.smallFont.draw(game.textBatch, "Lifes: " + game.lifes, 40,460);
         game.textBatch.end();
 
         // Update step =============================================
@@ -145,7 +145,10 @@ public class GameScreen implements Screen {
         if(player.isDead() && player.getAnimationFrame() >= 25.f)
         {
             game.lifes--;
-            game.setScreen(new GameScreen(game));
+            if(game.lifes <= 0)
+                game.setScreen(new MainMenuScreen(game));
+            else
+                game.setScreen(new GameScreen(game));
             this.dispose();
         }
     }

@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class PuigBros extends Game {
 	public SpriteBatch batch, textBatch;
 	public ShapeRenderer shapeRenderer;
-    BitmapFont smallFont;
+    BitmapFont smallFont, bigFont;
 	Texture img;
 	public OrthographicCamera camera, textCamera;
     AssetManager manager;
@@ -42,6 +42,11 @@ public class PuigBros extends Game {
         params.borderColor = Color.BLACK;
         params.color = Color.WHITE;
         smallFont = generator.generateFont(params); // font size 22 pixels
+
+        params.size = 64;
+        params.borderWidth = 8;
+        params.color = Color.RED;
+        bigFont = generator.generateFont(params); // font size 22 pixels
 
 		img = new Texture("libgdx.png");
 
