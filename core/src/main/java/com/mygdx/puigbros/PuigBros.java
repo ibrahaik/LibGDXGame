@@ -3,6 +3,8 @@ package com.mygdx.puigbros;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -122,6 +124,14 @@ public class PuigBros extends Game {
         {
             manager.load("powerup/frame000" +i+".png", Texture.class);
         }
+
+        // Sounds
+        manager.load("sound/music.mp3", Music.class);
+        manager.load("sound/loselife.wav", Sound.class);
+        manager.load("sound/kill.wav", Sound.class);
+        manager.load("sound/jump.wav", Sound.class);
+        manager.load("sound/powerup.wav", Sound.class);
+        manager.load("sound/levelcomplete.wav", Sound.class);
 
         manager.finishLoading();
     }

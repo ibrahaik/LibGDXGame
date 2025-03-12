@@ -1,6 +1,7 @@
 package com.mygdx.puigbros;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,11 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Player extends WalkingCharacter {
 
-    static final float JUMP_IMPULSE = -400f;
+    static final float JUMP_IMPULSE = -600f;
     static final float RUN_SPEED = 240f;
+    static final float BRAKE_SPEED = 120f;
     static final float STOP_SPEED = 5f;
     static final float RUN_ACCELERATION = 200f;
-    static final float INVULNERABILITY_DURATION = 10f;
+    static final float INVULNERABILITY_DURATION = 20f;
 
     AssetManager manager;
     ButtonLayout joypad;
@@ -57,10 +59,7 @@ public class Player extends WalkingCharacter {
                 frameTexture = 10;
             currentFrame = manager.get("player/Dead ("+frameTexture+").png", Texture.class);
 
-            speed.x *= 1 - (0.99f * delta);
-            if (speed.x < STOP_SPEED && speed.x >= -STOP_SPEED) {
-                speed.x = 0;
-            }
+            speed.x = 0f;
         }
         else
         {
@@ -104,7 +103,8 @@ public class Player extends WalkingCharacter {
 
             if(!falling && joypad.consumePush("Jump"))
             {
-                jump();
+                jump(1.f);
+                manager.get("sound/jump.wav", Sound.class).play();
             }
 
             if(!falling) {
@@ -121,18 +121,38 @@ public class Player extends WalkingCharacter {
                         speed.x = -RUN_SPEED;
                     }
                 } else {
-                    speed.x *= 1 - (0.99f * delta);
+                    if(speed.x < 0f)
+                    {
+                        if(speed.x < -STOP_SPEED) {
+                            speed.x += delta * BRAKE_SPEED;
+                        }
+                        else
+                        {
+                            speed.x = 0f;
+                        }
+                    }
+                    else if (speed.x > 0f)
+                    {
+                        if(speed.x > STOP_SPEED) {
+                            speed.x -= delta * BRAKE_SPEED;
+                        }
+                        else
+                        {
+                            speed.x = 0f;
+                        }
+                    }
+                    /*speed.x *= 1 - (0.99f * delta);
                     if (speed.x < STOP_SPEED && speed.x >= -STOP_SPEED) {
                         speed.x = 0;
-                    }
+                    }*/
                 }
             }
         }
     }
 
-    public void jump()
+    public void jump(float strength)
     {
-        speed.y = JUMP_IMPULSE;
+        speed.y = JUMP_IMPULSE * strength;
     }
 
     @Override

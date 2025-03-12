@@ -2,6 +2,8 @@ package com.mygdx.puigbros;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
@@ -91,6 +93,10 @@ public class GameScreen implements Screen {
         }
 
         paused = false;
+
+        game.manager.get("sound/music.mp3", Music.class).play();
+        game.manager.get("sound/music.mp3", Music.class).setLooping(true);
+
     }
 
     @Override
@@ -107,19 +113,16 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(Color.SKY);
 
         game.batch.setProjectionMatrix(game.camera.combined);
-        //game.batch.begin();
-        //game.batch.draw(game.img, 0, 0);
-        //game.batch.end();
 
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
-        /*game.shapeRenderer.begin();
-        game.shapeRenderer.setColor(Color.YELLOW);
-        game.shapeRenderer.line(0,0,800,480);
-        game.shapeRenderer.end();*/
-        tileMap.render(/*game.shapeRenderer*/);
-        //player.drawDebug(game.shapeRenderer);
-        //for (int i = 0; i < enemies.size(); i++)
-        //    enemies.get(i).drawDebug(game.shapeRenderer);
+        tileMap.render();
+
+        // Bounding box draw =======================================
+        player.drawDebug(game.shapeRenderer);
+        for (int i = 0; i < enemies.size(); i++)
+            enemies.get(i).drawDebug(game.shapeRenderer);
+        // =========================================================
+
         stage.draw();
 
         if(paused)
@@ -145,8 +148,8 @@ public class GameScreen implements Screen {
             }
             if(pauseMenu.consumeRelease("Quit"))
             {
-                game.setScreen(new MainMenuScreen(game));
                 this.dispose();
+                game.setScreen(new MainMenuScreen(game));
             }
         }
         else
@@ -185,10 +188,13 @@ public class GameScreen implements Screen {
                 if (rect_enemy.overlaps(rect_player)) {
                     if(player.hasInvulnerability()) {
                       wc.kill();
-                    } else if (player.getY() < wc.getY() && player.isFalling() && player.getSpeed().y > 0.f) {
-                        player.jump();
+                    } else if (player.getY() + player.getHeight()*0.5f < wc.getY() - wc.getHeight()*0.25f && player.isFalling() && player.getSpeed().y > 0.f) {
+                        player.jump(0.5f);
                         wc.kill();
+                        game.manager.get("sound/kill.wav", Sound.class).play();
                     } else {
+                        game.manager.get("sound/music.mp3", Music.class).stop();
+                        game.manager.get("sound/loselife.wav", Sound.class).play();
                         player.kill();
                     }
 
@@ -203,17 +209,21 @@ public class GameScreen implements Screen {
                 player.getInvulnerability();
                 collectable.remove();
                 collectables.remove(collectable);
+                game.manager.get("sound/powerup.wav", Sound.class).play();
             }
         }
 
             // Lose life
         if (player.isDead() && player.getAnimationFrame() >= 25.f) {
             game.lifes--;
-            if (game.lifes <= 0)
+            if (game.lifes <= 0) {
+                this.dispose();
                 game.setScreen(new MainMenuScreen(game));
-            else
+            } else {
+                this.dispose();
                 game.setScreen(new GameScreen(game));
-            this.dispose();
+            }
+
         }
     }
 
@@ -239,6 +249,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        game.manager.get("sound/music.mp3", Music.class).stop();
     }
 }
