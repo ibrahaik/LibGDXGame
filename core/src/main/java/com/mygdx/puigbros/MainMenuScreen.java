@@ -1,9 +1,7 @@
 package com.mygdx.puigbros;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenuScreen implements Screen
 {
@@ -13,7 +11,7 @@ public class MainMenuScreen implements Screen
     {
         this.game = game;
 
-        mainMenu = new ButtonLayout(game.camera, game.manager, game.smallFont);
+        mainMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
         mainMenu.loadFromJson("mainmenu.json");
     }
 
@@ -35,12 +33,13 @@ public class MainMenuScreen implements Screen
 
         game.textBatch.begin();
         game.bigFont.draw(game.textBatch,"SUPER PUIG BROS.", 30, 480 - 60);
+        game.smallFont.draw(game.textBatch,"(c) Puig Castellar 2025", 160, 480 - 420);
         game.textBatch.end();
 
         mainMenu.render(game.batch, game.textBatch);
 
 
-        if(mainMenu.consumePush("Start"))
+        if(mainMenu.consumeRelease("Start"))
         {
             game.lifes = 3;
             game.setScreen(new GameScreen(game));

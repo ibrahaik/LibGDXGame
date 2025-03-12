@@ -1,6 +1,5 @@
 package com.mygdx.puigbros;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -11,13 +10,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class PuigBros extends Game {
 	public SpriteBatch batch, textBatch;
 	public ShapeRenderer shapeRenderer;
-    BitmapFont smallFont, bigFont;
+    BitmapFont smallFont, mediumFont, bigFont;
 	Texture img;
 	public OrthographicCamera camera, textCamera;
     AssetManager manager;
@@ -37,11 +34,18 @@ public class PuigBros extends Game {
             FreeTypeFontGenerator(Gdx.files.internal("Dogfiles.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new
             FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        params.size = 32;
+        params.borderWidth = 2;
+        params.borderColor = Color.BLACK;
+        params.color = Color.WHITE;
+        smallFont = generator.generateFont(params); // font size 22 pixels
+
         params.size = 42;
         params.borderWidth = 4;
         params.borderColor = Color.BLACK;
         params.color = Color.WHITE;
-        smallFont = generator.generateFont(params); // font size 22 pixels
+        mediumFont = generator.generateFont(params); // font size 22 pixels
 
         params.size = 64;
         params.borderWidth = 8;
@@ -81,6 +85,8 @@ public class PuigBros extends Game {
         manager.load("gui/Right-on.png", Texture.class);
         manager.load("gui/Jump-off.png", Texture.class);
         manager.load("gui/Jump-on.png", Texture.class);
+        manager.load("gui/Pause-off.png", Texture.class);
+        manager.load("gui/Pause-on.png", Texture.class);
 
 
         // Player

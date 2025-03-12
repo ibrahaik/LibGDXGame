@@ -29,7 +29,7 @@ public class ButtonLayout implements InputProcessor {
         String text;
         String imageOn, imageOff;
         boolean pressed;
-        int pushes;
+        int pushes, releases;
 
 
         Button(int x, int y, int sx, int sy, String action, String text, String on, String off)
@@ -41,6 +41,7 @@ public class ButtonLayout implements InputProcessor {
             this.imageOff = off;
             pressed = false;
             pushes = 0;
+            releases = 0;
         }
     }
 
@@ -58,8 +59,12 @@ public class ButtonLayout implements InputProcessor {
         buttons = new HashMap<>();
         pointers = new HashMap<>();
 
-        Gdx.input.setInputProcessor(this);
+        setAsActiveInputProcessor();
+    }
 
+    void setAsActiveInputProcessor()
+    {
+        Gdx.input.setInputProcessor(this);
     }
 
     public void loadFromJson(String fileName)
@@ -97,6 +102,20 @@ public class ButtonLayout implements InputProcessor {
             if(buttons.get(action).pushes > 0)
             {
                 buttons.get(action).pushes = 0;
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    boolean consumeRelease(String action)
+    {
+        if(buttons.get(action) != null)
+        {
+            if(buttons.get(action).releases > 0)
+            {
+                buttons.get(action).releases = 0;
                 return true;
             }
         }
@@ -188,6 +207,7 @@ public class ButtonLayout implements InputProcessor {
         if(pointers.get(pointer) != null)
         {
             pointers.get(pointer).pressed = false;
+            pointers.get(pointer).releases++;
             pointers.remove(pointer);
         }
         return true; // return true to indicate the event was handled

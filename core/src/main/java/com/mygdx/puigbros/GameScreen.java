@@ -18,19 +18,22 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     PuigBros game;
-    ButtonLayout joypad;
+    ButtonLayout joypad, pauseMenu;
 
     Stage stage;
     TileMap tileMap;
 
     Player player;
     ArrayList<Actor> enemies;
+    boolean paused;
 
 
     public GameScreen(PuigBros game)
     {
         this.game = game;
 
+        pauseMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
+        pauseMenu.loadFromJson("pausemenu.json");
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("joypad.json");
@@ -71,6 +74,8 @@ public class GameScreen implements Screen {
                 stage.addActor(d);
             }
         }
+
+        paused = false;
     }
 
     @Override
@@ -101,39 +106,72 @@ public class GameScreen implements Screen {
         //for (int i = 0; i < enemies.size(); i++)
         //    enemies.get(i).drawDebug(game.shapeRenderer);
         stage.draw();
-        joypad.render(game.batch, game.textBatch);
 
-        game.textBatch.begin();
-        game.smallFont.draw(game.textBatch, "Lifes: " + game.lifes, 40,460);
-        game.textBatch.end();
+        if(paused)
+        {
+            pauseMenu.render(game.batch, game.textBatch);
+        }
+        else
+        {
+            joypad.render(game.batch, game.textBatch);
+            game.textBatch.begin();
+            game.mediumFont.draw(game.textBatch, "Lifes: " + game.lifes, 40,460);
+            game.textBatch.end();
+        }
+
 
         // Update step =============================================
+        if(paused)
+        {
+            if(pauseMenu.consumeRelease("Resume"))
+            {
+                joypad.setAsActiveInputProcessor();
+                paused = false;
+            }
+            if(pauseMenu.consumeRelease("Quit"))
+            {
+                game.setScreen(new MainMenuScreen(game));
+                this.dispose();
+            }
+        }
+        else
+        {
+            updateGameLogic(delta);
+
+            // Pause game
+            if(joypad.consumePush("Pause"))
+            {
+                paused = true;
+                pauseMenu.setAsActiveInputProcessor();
+            }
+        }
+    }
+
+    void updateGameLogic(float delta)
+    {
         stage.act(delta);
-        tileMap.scrollX = (int)(player.getX() - 400);
-        if(tileMap.scrollX < 0)
+
+        // Scroll update
+        tileMap.scrollX = (int) (player.getX() - 400);
+        if (tileMap.scrollX < 0)
             tileMap.scrollX = 0;
-        if(tileMap.scrollX >= tileMap.width * tileMap.TILE_SIZE - 800)
+        if (tileMap.scrollX >= tileMap.width * tileMap.TILE_SIZE - 800)
             tileMap.scrollX = tileMap.width * tileMap.TILE_SIZE - 800 - 1;
 
+        // Collision player - enemies
         Rectangle rect_player = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
-        for (int i = 0; i < enemies.size(); i++)
-        {
+        for (int i = 0; i < enemies.size(); i++) {
             Actor enemy = enemies.get(i);
             Rectangle rect_enemy = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
 
             WalkingCharacter wc = (WalkingCharacter) enemy;
-            if(!player.isDead() && !wc.isDead())
-            {
-                if(rect_enemy.overlaps(rect_player))
-                {
-                    if(player.getY() < wc.getY() && player.isFalling() && player.getSpeed().y > 0.f)
-                    {
+            if (!player.isDead() && !wc.isDead()) {
+                if (rect_enemy.overlaps(rect_player)) {
+                    if (player.getY() < wc.getY() && player.isFalling() && player.getSpeed().y > 0.f) {
                         player.jump();
                         wc.kill();
-                    }
-                    else
-                    {
+                    } else {
                         player.kill();
                     }
 
@@ -142,10 +180,9 @@ public class GameScreen implements Screen {
         }
 
         // Lose life
-        if(player.isDead() && player.getAnimationFrame() >= 25.f)
-        {
+        if (player.isDead() && player.getAnimationFrame() >= 25.f) {
             game.lifes--;
-            if(game.lifes <= 0)
+            if (game.lifes <= 0)
                 game.setScreen(new MainMenuScreen(game));
             else
                 game.setScreen(new GameScreen(game));
