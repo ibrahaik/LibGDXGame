@@ -12,6 +12,7 @@ public class Player extends WalkingCharacter {
     static final float RUN_SPEED = 240f;
     static final float STOP_SPEED = 5f;
     static final float RUN_ACCELERATION = 200f;
+    static final float INVULNERABILITY_DURATION = 10f;
 
     AssetManager manager;
     ButtonLayout joypad;
@@ -20,12 +21,14 @@ public class Player extends WalkingCharacter {
 
     float animationFrame = 0;
     boolean lookLeft = false;
+    float invulnerability = 0f;
 
     public Player(AssetManager manager)
     {
         setBounds(400,40,48, 112);
         this.manager = manager;
         currentFrame = manager.get("player/Idle (1).png", Texture.class);
+        invulnerability = 0.f;
 
     }
 
@@ -61,6 +64,9 @@ public class Player extends WalkingCharacter {
         }
         else
         {
+            if(invulnerability > 0.f)
+                invulnerability -= delta;
+
             if(falling)
             {
                 if(speed.y < 0)
@@ -138,6 +144,16 @@ public class Player extends WalkingCharacter {
         }
     }
 
+    public void getInvulnerability()
+    {
+        invulnerability = INVULNERABILITY_DURATION;
+    }
+
+    public boolean hasInvulnerability()
+    {
+        return invulnerability > 0.f;
+    }
+
     float getAnimationFrame()
     {
         return animationFrame;
@@ -147,6 +163,8 @@ public class Player extends WalkingCharacter {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
+        if(invulnerability > 0.f && (int)(invulnerability/0.125f)%2 == 0)
+            return;
 
         batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookLeft ? 28 : 50), getY() - getHeight()*0.5f, 128, 128, 0, 0, 669, 569, lookLeft, true);
     }

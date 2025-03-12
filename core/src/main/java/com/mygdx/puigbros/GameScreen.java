@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.puigbros.jsonloaders.CollectableJson;
 import com.mygdx.puigbros.jsonloaders.EnemyJson;
 import com.mygdx.puigbros.jsonloaders.LevelJson;
 
@@ -25,6 +26,7 @@ public class GameScreen implements Screen {
 
     Player player;
     ArrayList<Actor> enemies;
+    ArrayList<Actor> collectables;
     boolean paused;
 
 
@@ -47,6 +49,7 @@ public class GameScreen implements Screen {
         stage = new Stage();
         player = new Player(game.manager);
         enemies = new ArrayList<>();
+        collectables = new ArrayList<>();
         player.setMap(tileMap);
         player.setJoypad(joypad);
         stage.addActor(player);
@@ -72,6 +75,18 @@ public class GameScreen implements Screen {
                 d.setMap(tileMap);
                 enemies.add(d);
                 stage.addActor(d);
+            }
+        }
+
+        for(int i = 0; i < l.getCollectables().size(); i++)
+        {
+            CollectableJson c = l.getCollectables().get(i);
+            if(c.getType().equals("PowerUp"))
+            {
+                PowerUp p = new PowerUp(c.getX() * tileMap.TILE_SIZE, c.getY() * tileMap.TILE_SIZE, game.manager);
+                p.setMap(tileMap);
+                collectables.add(p);
+                stage.addActor(p);
             }
         }
 
@@ -168,7 +183,9 @@ public class GameScreen implements Screen {
             WalkingCharacter wc = (WalkingCharacter) enemy;
             if (!player.isDead() && !wc.isDead()) {
                 if (rect_enemy.overlaps(rect_player)) {
-                    if (player.getY() < wc.getY() && player.isFalling() && player.getSpeed().y > 0.f) {
+                    if(player.hasInvulnerability()) {
+                      wc.kill();
+                    } else if (player.getY() < wc.getY() && player.isFalling() && player.getSpeed().y > 0.f) {
                         player.jump();
                         wc.kill();
                     } else {
@@ -179,7 +196,17 @@ public class GameScreen implements Screen {
             }
         }
 
-        // Lose life
+        for (int i = 0; i < collectables.size(); i++) {
+            Actor collectable = collectables.get(i);
+            Rectangle rect_coll = new Rectangle(collectable.getX(), collectable.getY(), collectable.getWidth(), collectable.getHeight());
+            if (rect_coll.overlaps(rect_player)) {
+                player.getInvulnerability();
+                collectable.remove();
+                collectables.remove(collectable);
+            }
+        }
+
+            // Lose life
         if (player.isDead() && player.getAnimationFrame() >= 25.f) {
             game.lifes--;
             if (game.lifes <= 0)

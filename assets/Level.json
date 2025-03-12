@@ -11,6 +11,13 @@
       y: 1
     }
   ],
+  collectables: [
+    {
+      "type": PowerUp
+      "x": 21
+      "y": 1
+    }
+  ],
   mapHeight: 8
   mapWidth: 30
   tileMap: [

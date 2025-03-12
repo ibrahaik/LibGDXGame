@@ -117,6 +117,12 @@ public class PuigBros extends Game {
             manager.load("dino/Dead (" +(i+1)+").png", Texture.class);
         }
 
+        //PowerUp
+        for (int i = 0; i < 7; i++)
+        {
+            manager.load("powerup/frame000" +i+".png", Texture.class);
+        }
+
         manager.finishLoading();
     }
 

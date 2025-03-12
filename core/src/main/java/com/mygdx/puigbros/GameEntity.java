@@ -9,6 +9,8 @@ import java.awt.Rectangle;
 public class GameEntity extends Actor {
 
     public Vector2 speed;
+    protected TileMap map;
+
     public GameEntity()
     {
         speed = new Vector2(0,0);
@@ -24,4 +26,9 @@ public class GameEntity extends Actor {
     public Vector2 getSpeed() {
         return speed;
     }
+
+    public void setMap(TileMap map) {
+        this.map = map;
+    }
+
 }
