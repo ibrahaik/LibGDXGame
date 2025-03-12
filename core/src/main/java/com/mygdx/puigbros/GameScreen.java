@@ -118,9 +118,9 @@ public class GameScreen implements Screen {
         tileMap.render();
 
         // Bounding box draw =======================================
-        player.drawDebug(game.shapeRenderer);
+        /*player.drawDebug(game.shapeRenderer);
         for (int i = 0; i < enemies.size(); i++)
-            enemies.get(i).drawDebug(game.shapeRenderer);
+            enemies.get(i).drawDebug(game.shapeRenderer);*/
         // =========================================================
 
         stage.draw();
@@ -223,7 +223,13 @@ public class GameScreen implements Screen {
                 this.dispose();
                 game.setScreen(new GameScreen(game));
             }
+        }
 
+        // Complete level
+        if(player.getX() >= tileMap.width * tileMap.TILE_SIZE)
+        {
+            this.dispose();
+            game.setScreen(new LevelCompleteScreen(game));
         }
     }
 

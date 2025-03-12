@@ -103,7 +103,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        while(mapY < height && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 17))
+        while(mapY < height && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 77))
         {
             mapY++;
         }
@@ -128,7 +128,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        while(mapY >= 0 && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 17))
+        while(mapY >= 0 && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 77))
         {
             mapY--;
         }
