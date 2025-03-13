@@ -36,18 +36,18 @@ public class GameScreen implements Screen {
     {
         this.game = game;
 
+        // Pause menu
         pauseMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
         pauseMenu.loadFromJson("pausemenu.json");
+
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("joypad.json");
-        /*joypad.addButton(40,340, 60, 60, "Left");
-        joypad.addButton(160,340, 60, 60, "Right");
-        joypad.addButton(100,400, 60, 60, "Down");
-        joypad.addButton(100,280, 60, 60, "Up");
-        joypad.addButton(700,340, 60, 60, "Jump");*/
 
+        // Create tile map
         tileMap = new TileMap(game.manager, game.batch);
+
+        // Init game entities
         stage = new Stage();
         player = new Player(game.manager);
         enemies = new ArrayList<>();
@@ -61,6 +61,7 @@ public class GameScreen implements Screen {
         viewport.setCamera(game.camera);
         stage.setViewport(viewport);
 
+        // Load level from json file
         Json json = new Json();
 
         FileHandle file = Gdx.files.internal("Level.json");
@@ -68,6 +69,7 @@ public class GameScreen implements Screen {
         LevelJson l = json.fromJson(LevelJson.class, scores);
         tileMap.loadFromLevel(l);
 
+        // Init enemies from json level file
         for(int i = 0; i < l.getEnemies().size(); i++)
         {
             EnemyJson e = l.getEnemies().get(i);
@@ -80,6 +82,7 @@ public class GameScreen implements Screen {
             }
         }
 
+        // Init collectibles from json level file
         for(int i = 0; i < l.getCollectables().size(); i++)
         {
             CollectableJson c = l.getCollectables().get(i);
@@ -109,12 +112,11 @@ public class GameScreen implements Screen {
 
         // Render step =============================================
         game.camera.update();
-
+        game.batch.setProjectionMatrix(game.camera.combined);
+        game.shapeRenderer.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(Color.SKY);
 
-        game.batch.setProjectionMatrix(game.camera.combined);
-
-        game.shapeRenderer.setProjectionMatrix(game.camera.combined);
+        // Draw tile map and background
         tileMap.render();
 
         // Bounding box draw =======================================
@@ -123,17 +125,20 @@ public class GameScreen implements Screen {
             enemies.get(i).drawDebug(game.shapeRenderer);*/
         // =========================================================
 
+        // Draw stage: player, enemies and collectibles
         stage.draw();
 
         if(paused)
         {
+            // Draw pause menu
             pauseMenu.render(game.batch, game.textBatch);
         }
         else
         {
+            // Draw GUI
             joypad.render(game.batch, game.textBatch);
             game.textBatch.begin();
-            game.mediumFont.draw(game.textBatch, "Lifes: " + game.lifes, 40,460);
+            game.mediumFont.draw(game.textBatch, "Lifes: " + game.lives, 40,460);
             game.textBatch.end();
         }
 
@@ -141,6 +146,7 @@ public class GameScreen implements Screen {
         // Update step =============================================
         if(paused)
         {
+            // Game paused
             if(pauseMenu.consumeRelease("Resume"))
             {
                 joypad.setAsActiveInputProcessor();
@@ -154,6 +160,7 @@ public class GameScreen implements Screen {
         }
         else
         {
+            // Game running
             updateGameLogic(delta);
 
             // Pause game
@@ -179,33 +186,41 @@ public class GameScreen implements Screen {
         // Collision player - enemies
         Rectangle rect_player = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
-        for (int i = 0; i < enemies.size(); i++) {
+        for (int i = 0; i < enemies.size(); i++)
+        {
             Actor enemy = enemies.get(i);
             Rectangle rect_enemy = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
-
             WalkingCharacter wc = (WalkingCharacter) enemy;
+
             if (!player.isDead() && !wc.isDead()) {
                 if (rect_enemy.overlaps(rect_player)) {
                     if(player.hasInvulnerability()) {
+                      // Kill enemies if invulnerable
                       wc.kill();
-                    } else if (player.getY() + player.getHeight()*0.5f < wc.getY() - wc.getHeight()*0.25f && player.isFalling() && player.getSpeed().y > 0.f) {
+                    } else if (player.getY() + player.getHeight()*0.5f < wc.getY() - wc.getHeight()*0.25f &&
+                        player.isFalling() && player.getSpeed().y > 0.f) {
+                        // Kill enemies by jumping over them
                         player.jump(0.5f);
                         wc.kill();
-                        game.manager.get("sound/kill.wav", Sound.class).play();
                     } else {
+                        // Lose a life
                         game.manager.get("sound/music.mp3", Music.class).stop();
                         game.manager.get("sound/loselife.wav", Sound.class).play();
                         player.kill();
                     }
-
                 }
             }
         }
 
-        for (int i = 0; i < collectables.size(); i++) {
+        // Pick up collectables
+        for (int i = 0; i < collectables.size(); i++)
+        {
             Actor collectable = collectables.get(i);
             Rectangle rect_coll = new Rectangle(collectable.getX(), collectable.getY(), collectable.getWidth(), collectable.getHeight());
-            if (rect_coll.overlaps(rect_player)) {
+
+            if (rect_coll.overlaps(rect_player))
+            {
+                // Give invulnerability
                 player.getInvulnerability();
                 collectable.remove();
                 collectables.remove(collectable);
@@ -213,10 +228,10 @@ public class GameScreen implements Screen {
             }
         }
 
-            // Lose life
+        // Lose life
         if (player.isDead() && player.getAnimationFrame() >= 25.f) {
-            game.lifes--;
-            if (game.lifes <= 0) {
+            game.lives--;
+            if (game.lives <= 0) {
                 this.dispose();
                 game.setScreen(new MainMenuScreen(game));
             } else {
@@ -240,7 +255,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        paused = true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.mygdx.puigbros;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,6 +12,7 @@ public class Dino extends WalkingCharacter
 
     static final float RUN_SPEED = 120f;
     static final float RUN_ACCELERATION = 200f;
+    static final float UPDATE_DISTANCE = 500f;
     boolean lookRight = false;
 
     AssetManager manager;
@@ -30,7 +32,7 @@ public class Dino extends WalkingCharacter
     @Override
     public void act(float delta) {
 
-        if(Math.abs(player.getX() - getX()) > 500) return;
+        if(Math.abs(player.getX() - getX()) > UPDATE_DISTANCE) return;
 
         super.act(delta);
 
@@ -52,6 +54,7 @@ public class Dino extends WalkingCharacter
         }
         else if(!falling)
         {
+            // Walk animation
             animationFrame += delta * 6.f;
             if(animationFrame >= 10.f)
                 animationFrame -= 10.f;
@@ -59,13 +62,14 @@ public class Dino extends WalkingCharacter
 
             if(lookRight)
             {
-
+                // Accelerate right
                 speed.x += RUN_ACCELERATION * delta;
                 if(speed.x > RUN_SPEED)
                 {
                     speed.x = RUN_SPEED;
                 }
 
+                // Collided with a wall
                 if(map.isSolid((int)(getX() + getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
                 {
                     lookRight = false;
@@ -73,12 +77,14 @@ public class Dino extends WalkingCharacter
             }
             else
             {
+                // Accelerate left
                 speed.x -= RUN_ACCELERATION * delta;
                 if(speed.x < -RUN_SPEED)
                 {
                     speed.x = -RUN_SPEED;
                 }
 
+                // Collided with a wall
                 if(map.isSolid((int)(getX() - getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
                 {
                     lookRight = true;
@@ -87,6 +93,7 @@ public class Dino extends WalkingCharacter
         }
         else
         {
+            // Frame for falling
             currentFrame = manager.get("dino/Walk (1).png", Texture.class);
         }
     }
@@ -94,7 +101,7 @@ public class Dino extends WalkingCharacter
     @Override
     public void kill() {
         super.kill();
-        speed.y = -100;
+        manager.get("sound/kill.wav", Sound.class).play();
     }
 
     @Override
@@ -104,10 +111,10 @@ public class Dino extends WalkingCharacter
         batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookRight ? 12 : 44), getY() - getHeight()*0.5f, 128, 128, 0, 0, 680, 472, !lookRight, true);
     }
 
+    // Draw collision box
     @Override
     public void drawDebug(ShapeRenderer shapes) {
         //super.drawDebug(shapes);
-
         shapes.begin(ShapeRenderer.ShapeType.Filled);
         shapes.setColor(Color.GREEN);
         shapes.rect(getX() - getWidth()*0.5f - map.scrollX, getY() - getHeight()*0.5f, getWidth(), getHeight());

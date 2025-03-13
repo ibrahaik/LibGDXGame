@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.Texture;
 public class LevelCompleteScreen implements Screen {
 
     PuigBros game;
-    ButtonLayout mainMenu;
+    ButtonLayout endMenu;
     public LevelCompleteScreen(PuigBros game)
     {
         this.game = game;
 
-        mainMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
-        mainMenu.loadFromJson("endmenu.json");
+        endMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
+        endMenu.loadFromJson("endmenu.json");
 
         game.manager.get("sound/levelcomplete.wav", Sound.class).play();
     }
@@ -39,10 +39,10 @@ public class LevelCompleteScreen implements Screen {
         game.smallFont.draw(game.textBatch,"Now create your own game!", 120, 480 - 420);
         game.textBatch.end();
 
-        mainMenu.render(game.batch, game.textBatch);
+        endMenu.render(game.batch, game.textBatch);
 
 
-        if(mainMenu.consumeRelease("Menu"))
+        if(endMenu.consumeRelease("Menu"))
         {
             this.dispose();
             game.setScreen(new MainMenuScreen(game));

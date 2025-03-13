@@ -39,9 +39,10 @@ public class MainMenuScreen implements Screen
         mainMenu.render(game.batch, game.textBatch);
 
 
+        // Start the game!
         if(mainMenu.consumeRelease("Start"))
         {
-            game.lifes = 3;
+            game.lives = 3;
             game.setScreen(new GameScreen(game));
             this.dispose();
         }

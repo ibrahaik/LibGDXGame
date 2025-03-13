@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-public class Player extends WalkingCharacter {
+public class Player extends WalkingCharacter
+{
 
     static final float JUMP_IMPULSE = -600f;
     static final float RUN_SPEED = 240f;
@@ -31,7 +32,6 @@ public class Player extends WalkingCharacter {
         this.manager = manager;
         currentFrame = manager.get("player/Idle (1).png", Texture.class);
         invulnerability = 0.f;
-
     }
 
     public void setJoypad(ButtonLayout joypad) {
@@ -41,11 +41,13 @@ public class Player extends WalkingCharacter {
     public void act(float delta) {
         super.act(delta);
 
+        // Fall too low
         if(getY() > map.height * TileMap.TILE_SIZE)
         {
             kill();
         }
 
+        // Left bounds of the level
         if(getX() < getWidth() / 2)
         {
             setX(getWidth() / 2);
@@ -53,6 +55,7 @@ public class Player extends WalkingCharacter {
 
         if(dead)
         {
+            // Death animation
             animationFrame += 10.f*delta;
             int frameTexture = (int)animationFrame+1;
             if(frameTexture > 10)
@@ -63,6 +66,7 @@ public class Player extends WalkingCharacter {
         }
         else
         {
+            // Reduce remaining invulnerability
             if(invulnerability > 0.f)
                 invulnerability -= delta;
 
@@ -70,6 +74,7 @@ public class Player extends WalkingCharacter {
             {
                 if(speed.y < 0)
                 {
+                    // Start jumping
                     float base_impulse = -JUMP_IMPULSE;
                     float current_impulse = -speed.y;
                     animationFrame = 0 + ((base_impulse - current_impulse) / 32);
@@ -77,11 +82,11 @@ public class Player extends WalkingCharacter {
                 }
                 else
                 {
+                    // Start falling
                     animationFrame = 9 + (speed.y / 64);
                     if (animationFrame > 11) animationFrame = 11;
                 }
                 currentFrame = manager.get("player/Jump ("+(int)(animationFrame+1)+").png", Texture.class);
-
 
             }
             else if((speed.x < 0.1f && speed.x > -0.1f))
@@ -103,24 +108,35 @@ public class Player extends WalkingCharacter {
 
             if(!falling && joypad.consumePush("Jump"))
             {
+                // Jump
                 jump(1.f);
                 manager.get("sound/jump.wav", Sound.class).play();
             }
 
-            if(!falling) {
-                if (joypad.isPressed("Right")) {
+            if(!falling)
+            {
+                // On the ground
+                if (joypad.isPressed("Right"))
+                {
+                    // Accelerate right
                     lookLeft = false;
                     speed.x += RUN_ACCELERATION * delta;
                     if (speed.x > RUN_SPEED) {
                         speed.x = RUN_SPEED;
                     }
-                } else if (joypad.isPressed("Left")) {
+                }
+                else if (joypad.isPressed("Left"))
+                {
+                    // Accelerate left
                     lookLeft = true;
                     speed.x -= RUN_ACCELERATION * delta;
                     if (speed.x < -RUN_SPEED) {
                         speed.x = -RUN_SPEED;
                     }
-                } else {
+                }
+                else
+                {
+                    // Reduce speed and stop
                     if(speed.x < 0f)
                     {
                         if(speed.x < -STOP_SPEED) {
@@ -141,10 +157,6 @@ public class Player extends WalkingCharacter {
                             speed.x = 0f;
                         }
                     }
-                    /*speed.x *= 1 - (0.99f * delta);
-                    if (speed.x < STOP_SPEED && speed.x >= -STOP_SPEED) {
-                        speed.x = 0;
-                    }*/
                 }
             }
         }
@@ -183,12 +195,14 @@ public class Player extends WalkingCharacter {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
+        // Blink effect when invulnerable
         if(invulnerability > 0.f && (int)(invulnerability/0.125f)%2 == 0)
             return;
 
         batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookLeft ? 28 : 50), getY() - getHeight()*0.5f, 128, 128, 0, 0, 669, 569, lookLeft, true);
     }
 
+    // Draw collision box
     public void drawDebug(ShapeRenderer shapes) {
         //super.drawDebug(shapes);
 

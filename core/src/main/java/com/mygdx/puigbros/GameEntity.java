@@ -6,7 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.awt.Rectangle;
 
-public class GameEntity extends Actor {
+public class GameEntity extends Actor
+{
 
     public Vector2 speed;
     protected TileMap map;

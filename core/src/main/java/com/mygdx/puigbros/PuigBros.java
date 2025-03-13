@@ -13,25 +13,27 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-public class PuigBros extends Game {
+public class PuigBros extends Game
+{
 	public SpriteBatch batch, textBatch;
 	public ShapeRenderer shapeRenderer;
     BitmapFont smallFont, mediumFont, bigFont;
-	Texture img;
 	public OrthographicCamera camera, textCamera;
     AssetManager manager;
 
-    int lifes;
+    int lives;
 
 
 	@Override
-	public void create () {
+	public void create ()
+    {
         manager = new AssetManager();
 		batch = new SpriteBatch();
         textBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setAutoShapeType(true);
 
+        // Fonts
         FreeTypeFontGenerator generator = new
             FreeTypeFontGenerator(Gdx.files.internal("Dogfiles.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter params = new
@@ -54,8 +56,7 @@ public class PuigBros extends Game {
         params.color = Color.RED;
         bigFont = generator.generateFont(params); // font size 22 pixels
 
-		img = new Texture("libgdx.png");
-
+        // Cameras
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 800, 480);
 
@@ -68,14 +69,16 @@ public class PuigBros extends Game {
 
         loadAssets();
 
-        lifes = 3;
 		setScreen(new MainMenuScreen(this));
 	}
 
     void loadAssets()
     {
+        // Tiles
         for(int i = 1; i < 19; i++)
             manager.load("tiles/"+i+".png", Texture.class);
+
+        // Background image
         manager.load("BG.png", Texture.class);
 
         //GUI
@@ -144,6 +147,5 @@ public class PuigBros extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 }

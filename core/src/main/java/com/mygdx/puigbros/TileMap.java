@@ -1,8 +1,10 @@
 package com.mygdx.puigbros;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.puigbros.jsonloaders.LevelJson;
 
 public class TileMap {
@@ -24,6 +26,7 @@ public class TileMap {
 
     void loadFromLevel(LevelJson l)
     {
+        // Load from json file
         width = l.getMapWidth();
         height = l.getMapHeight();
 
@@ -34,16 +37,17 @@ public class TileMap {
             tiles[i] = new byte[width];
         }
 
-        for(int i = 0; i < height; i++)
-            for(int j = 0; j < width; j++)
-            {
+        for(int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 tiles[i][j] = l.getTileMap()[i][j];
             }
+        }
     }
 
-    public void render(/*ShapeRenderer shapeRenderer*/)
-    {
-        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    // Old render with color squares
+    public void render(ShapeRenderer shapeRenderer) {
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for(int j = 0; j < height; j++)
             for(int i = 0; i < width; i++)
             {
@@ -55,11 +59,16 @@ public class TileMap {
                     shapeRenderer.rect(TILE_SIZE * i + 6 - scrollX, TILE_SIZE * j + 6, TILE_SIZE - 12, TILE_SIZE - 12);
                 }
             }
-        shapeRenderer.end();*/
+        shapeRenderer.end();
+    }
+
+    public void render()
+    {
 
         batch.begin();
 
         Texture bgTexture = manager.get("BG.png", Texture.class);
+
         // Parallax scroll
         int bgWidth = bgTexture.getWidth();
         int bgHeight = bgTexture.getHeight();
@@ -68,7 +77,7 @@ public class TileMap {
         batch.draw(bgTexture, scrollXPos, 0, bgWidth, bgHeight, 0, 0, bgWidth, bgHeight, false, true);
         batch.draw(bgTexture, scrollXPos + bgWidth, 0, bgWidth, bgHeight, 0, 0, bgWidth, bgHeight, false, true);
 
-
+        // Tile map
         for(int j = 0; j < height; j++)
             for(int i = 0; i < width; i++)
             {
@@ -103,7 +112,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        while(mapY < height && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 77))
+        while(mapY < height && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 17))
         {
             mapY++;
         }
@@ -128,7 +137,7 @@ public class TileMap {
         if(mapX >= width) mapX = width - 1;
         if(mapY >= height) mapY = height - 1;
 
-        while(mapY >= 0 && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 77))
+        while(mapY >= 0 && (tiles[mapY][mapX] == 0 || tiles[mapY][mapX] >= 17))
         {
             mapY--;
         }

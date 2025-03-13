@@ -31,7 +31,6 @@ public class ButtonLayout implements InputProcessor {
         boolean pressed;
         int pushes, releases;
 
-
         Button(int x, int y, int sx, int sy, String action, String text, String on, String off)
         {
             rect = new Rectangle(x, y, sx, sy);
@@ -78,7 +77,6 @@ public class ButtonLayout implements InputProcessor {
         {
             addButton(b.x, b.y, b.width, b.height, b.action, b.text, b.image_on, b.image_off);
         }
-
     }
 
     public void addButton(int x, int y, int sx, int sy, String action, String text, String imageOn, String imageOff)
@@ -123,6 +121,7 @@ public class ButtonLayout implements InputProcessor {
 
     }
 
+    // Render for debug purposes
     public void render(ShapeRenderer shapeRenderer)
     {
         shapeRenderer.setAutoShapeType(true);
@@ -140,6 +139,7 @@ public class ButtonLayout implements InputProcessor {
 
     public void render(SpriteBatch spriteBatch, SpriteBatch textBatch)
     {
+        // Button images
         spriteBatch.begin();
         for(String i:buttons.keySet())
         {
@@ -150,13 +150,13 @@ public class ButtonLayout implements InputProcessor {
         }
         spriteBatch.end();
 
+        // Button texts
         textBatch.begin();
         for(String i:buttons.keySet())
         {
             Button b = buttons.get(i);
 
             if(b.text != null) {
-
                 GlyphLayout glyphLayout = new GlyphLayout();
                 glyphLayout.setText(font, b.text);
                 font.draw(textBatch, glyphLayout, b.rect.x + (b.rect.width - glyphLayout.width) / 2f, 480 - (b.rect.y + (b.rect.height - glyphLayout.height) / 2f));
@@ -188,10 +188,10 @@ public class ButtonLayout implements InputProcessor {
         camera.unproject(touchPos);
 
         for(String i:buttons.keySet())
-        //for(int i = 0; i < buttons.size(); i++)
         {
             if(buttons.get(i).rect.contains(touchPos.x,touchPos.y))
             {
+                // Button has been pressed
                 pointers.put(pointer,buttons.get(i));
                 buttons.get(i).pressed = true;
                 buttons.get(i).pushes ++;
@@ -203,9 +203,10 @@ public class ButtonLayout implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-        // your touch up code here
+
         if(pointers.get(pointer) != null)
         {
+            // This pointer was linked to a button, so release it
             pointers.get(pointer).pressed = false;
             pointers.get(pointer).releases++;
             pointers.remove(pointer);
@@ -221,21 +222,14 @@ public class ButtonLayout implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
+        // Get screen camera coordinates of touch
         Vector3 touchPos = new Vector3();
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos);
 
-        /*if(pointers.get(pointer) != null)
-        {
-            if(!pointers.get(pointer).rect.contains(touchPos.x, touchPos.y))
-            {
-                pointers.get(pointer).pressed = false;
-            }
-        }*/
-
         for(String i:buttons.keySet())
-        //for(int i = 0; i < buttons.size(); i++)
         {
+            // Pointer is now inside a new button; release previous button
             if(buttons.get(i).rect.contains(touchPos.x,touchPos.y))
             {
                 if(pointers.get(pointer) != null)

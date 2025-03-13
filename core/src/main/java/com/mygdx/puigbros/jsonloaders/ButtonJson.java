@@ -1,6 +1,7 @@
 package com.mygdx.puigbros.jsonloaders;
 
-public class ButtonJson {
+public class ButtonJson
+{
     public int x;
     public int y;
     public int width;
@@ -9,7 +10,6 @@ public class ButtonJson {
     public String text;
     public String image_on;
     public String image_off;
-
 
     public ButtonJson()
     {

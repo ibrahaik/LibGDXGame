@@ -12,7 +12,8 @@ public class LevelJson
     private ArrayList<EnemyJson> enemies;
     private ArrayList<CollectableJson> collectables;
 
-    public LevelJson() {
+    public LevelJson()
+    {
     }
 
     public LevelJson(int mapWidth, int mapHeight, byte[][] tileMap)
