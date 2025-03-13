@@ -13,6 +13,7 @@ public class WalkingCharacter extends GameEntity {
 
     protected boolean falling;
     protected boolean dead;
+    protected boolean lookLeft;
 
     public WalkingCharacter()
     {

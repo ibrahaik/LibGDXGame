@@ -23,7 +23,6 @@ public class Player extends WalkingCharacter
     Texture currentFrame;
 
     float animationFrame = 0;
-    boolean lookLeft = false;
     float invulnerability = 0f;
 
     public Player(AssetManager manager)

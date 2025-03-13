@@ -13,7 +13,6 @@ public class Dino extends WalkingCharacter
     static final float RUN_SPEED = 120f;
     static final float RUN_ACCELERATION = 200f;
     static final float UPDATE_DISTANCE = 500f;
-    boolean lookRight = false;
 
     AssetManager manager;
     Texture currentFrame;
@@ -60,7 +59,7 @@ public class Dino extends WalkingCharacter
                 animationFrame -= 10.f;
             currentFrame = manager.get("dino/Walk ("+(int)(animationFrame+1)+").png", Texture.class);
 
-            if(lookRight)
+            if(!lookLeft)
             {
                 // Accelerate right
                 speed.x += RUN_ACCELERATION * delta;
@@ -72,7 +71,7 @@ public class Dino extends WalkingCharacter
                 // Collided with a wall
                 if(map.isSolid((int)(getX() + getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
                 {
-                    lookRight = false;
+                    lookLeft = true;
                 }
             }
             else
@@ -87,7 +86,7 @@ public class Dino extends WalkingCharacter
                 // Collided with a wall
                 if(map.isSolid((int)(getX() - getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
                 {
-                    lookRight = true;
+                    lookLeft = false;
                 }
             }
         }
@@ -108,7 +107,7 @@ public class Dino extends WalkingCharacter
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookRight ? 12 : 44), getY() - getHeight()*0.5f, 128, 128, 0, 0, 680, 472, !lookRight, true);
+        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookLeft ? 44 : 12), getY() - getHeight()*0.5f, 128, 128, 0, 0, 680, 472, lookLeft, true);
     }
 
     // Draw collision box
