@@ -24,6 +24,8 @@ public class ButtonLayout implements InputProcessor {
 
     class Button {
 
+        public float debug_x;
+        public float debug_y;
         Rectangle rect;
         String action;
         String text;
@@ -45,7 +47,7 @@ public class ButtonLayout implements InputProcessor {
     }
 
     Map<String,Button> buttons;
-    Map<Integer,Button> pointers;
+    Map<Integer,String> pointers;
     final OrthographicCamera camera;
     AssetManager manager;
     BitmapFont font;
@@ -184,17 +186,19 @@ public class ButtonLayout implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
 
         Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        touchPos.set(x, y, 0);
         camera.unproject(touchPos);
 
-        for(String i:buttons.keySet())
+        for(String action:buttons.keySet())
         {
-            if(buttons.get(i).rect.contains(touchPos.x,touchPos.y))
+            if(buttons.get(action).rect.contains(touchPos.x,touchPos.y))
             {
                 // Button has been pressed
-                pointers.put(pointer,buttons.get(i));
-                buttons.get(i).pressed = true;
-                buttons.get(i).pushes ++;
+                pointers.put(pointer,action);
+                buttons.get(action).debug_x = touchPos.x;
+                buttons.get(action).debug_y = touchPos.y;
+                buttons.get(action).pressed = true;
+                buttons.get(action).pushes ++;
             }
         }
 
@@ -207,8 +211,8 @@ public class ButtonLayout implements InputProcessor {
         if(pointers.get(pointer) != null)
         {
             // This pointer was linked to a button, so release it
-            pointers.get(pointer).pressed = false;
-            pointers.get(pointer).releases++;
+            buttons.get(pointers.get(pointer)).pressed = false;
+            buttons.get(pointers.get(pointer)).releases++;
             pointers.remove(pointer);
         }
         return true; // return true to indicate the event was handled
@@ -224,7 +228,7 @@ public class ButtonLayout implements InputProcessor {
     {
         // Get screen camera coordinates of touch
         Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        touchPos.set(screenX, screenY, 0);
         camera.unproject(touchPos);
 
         for(String i:buttons.keySet())
@@ -234,9 +238,9 @@ public class ButtonLayout implements InputProcessor {
             {
                 if(pointers.get(pointer) != null)
                 {
-                    pointers.get(pointer).pressed = false;
+                    buttons.get(pointers.get(pointer)).pressed = false;
                 }
-                pointers.put(pointer,buttons.get(i));
+                pointers.put(pointer,buttons.get(i).action);
                 buttons.get(i).pressed = true;
             }
         }

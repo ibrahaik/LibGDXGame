@@ -26,6 +26,7 @@ public class Dino extends WalkingCharacter
         this.manager = manager;
         this.player = player;
         currentFrame = manager.get("dino/Walk (1).png", Texture.class);
+        lookLeft = true;
     }
 
     @Override
@@ -69,7 +70,8 @@ public class Dino extends WalkingCharacter
                 }
 
                 // Collided with a wall
-                if(map.isSolid((int)(getX() + getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
+                if(map.isSolid((int)(getX() + getWidth()/2 + delta * speed.x), (int)(getY() - getHeight()*0.25f)) ||
+                    map.isSolid((int)(getX() + getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)) )
                 {
                     lookLeft = true;
                 }
@@ -84,7 +86,8 @@ public class Dino extends WalkingCharacter
                 }
 
                 // Collided with a wall
-                if(map.isSolid((int)(getX() - getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
+                if(map.isSolid((int)(getX() - getWidth()/2 + delta * speed.x), (int)(getY() - getHeight()*0.25f)) ||
+                    map.isSolid((int)(getX() - getWidth()/2 + delta * speed.x), (int)(getY() + getHeight()*0.25f)))
                 {
                     lookLeft = false;
                 }

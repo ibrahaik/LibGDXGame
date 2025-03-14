@@ -139,6 +139,12 @@ public class GameScreen implements Screen {
             joypad.render(game.batch, game.textBatch);
             game.textBatch.begin();
             game.mediumFont.draw(game.textBatch, "Lifes: " + game.lives, 40,460);
+            // Debug touch pointers
+            /*for(Integer i : joypad.pointers.keySet())
+            {
+                String action = joypad.pointers.get(i);
+                game.mediumFont.draw(game.textBatch, "Pointer "+i+": " + action+" ("+(int)joypad.buttons.get(action).debug_x+","+(int)joypad.buttons.get(action).debug_y+")", 40, 400 - i*40);
+            }*/
             game.textBatch.end();
         }
 
