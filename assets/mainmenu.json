@@ -6,7 +6,7 @@
       width: 400
       height: 200
       action: Start
-      "text": "Start game!"
+      "text": "Jugar!"
       "image_on": "gui/Button-on.png"
       "image_off": "gui/Button-off.png"
     }

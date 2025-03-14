@@ -35,8 +35,8 @@ public class LevelCompleteScreen implements Screen {
         game.batch.end();
 
         game.textBatch.begin();
-        game.bigFont.draw(game.textBatch,"CONGRATULATIONS!", 0, 480 - 60);
-        game.smallFont.draw(game.textBatch,"Now create your own game!", 120, 480 - 420);
+        game.bigFont.draw(game.textBatch,"ENHORABONA!", 100, 480 - 60);
+        game.smallFont.draw(game.textBatch,"Ara crea el teu propi joc!", 120, 480 - 420);
         game.textBatch.end();
 
         endMenu.render(game.batch, game.textBatch);

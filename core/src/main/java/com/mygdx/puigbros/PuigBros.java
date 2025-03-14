@@ -136,6 +136,8 @@ public class PuigBros extends Game
         manager.load("sound/powerup.wav", Sound.class);
         manager.load("sound/levelcomplete.wav", Sound.class);
 
+        manager.update();
+
         manager.finishLoading();
     }
 
