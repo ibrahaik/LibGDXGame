@@ -5,8 +5,8 @@
       y: 110
       width: 400
       height: 120
-      action: Continua
-      "text": "RESUME"
+      action: Resume
+      "text": "Continua"
       "image_on": "gui/Button-on.png"
       "image_off": "gui/Button-off.png"
     },
@@ -15,8 +15,8 @@
       y: 250
       width: 400
       height: 120
-      action: Surt
-      "text": "QUIT"
+      action: Quit
+      "text": "Surt"
       "image_on": "gui/Button-on.png"
       "image_off": "gui/Button-off.png"
     }

@@ -67,79 +67,9 @@ public class PuigBros extends Game
         batch.setProjectionMatrix(camera.projection);
         textBatch.setProjectionMatrix(textCamera.projection);
 
-        loadAssets();
 
-		setScreen(new MainMenuScreen(this));
+		setScreen(new LoadingScreen(this));
 	}
-
-    void loadAssets()
-    {
-        // Tiles
-        for(int i = 1; i < 19; i++)
-            manager.load("tiles/"+i+".png", Texture.class);
-
-        // Background image
-        manager.load("BG.png", Texture.class);
-
-        //GUI
-        manager.load("gui/Button-off.png", Texture.class);
-        manager.load("gui/Button-on.png", Texture.class);
-        manager.load("gui/Left-off.png", Texture.class);
-        manager.load("gui/Left-on.png", Texture.class);
-        manager.load("gui/Right-off.png", Texture.class);
-        manager.load("gui/Right-on.png", Texture.class);
-        manager.load("gui/Jump-off.png", Texture.class);
-        manager.load("gui/Jump-on.png", Texture.class);
-        manager.load("gui/Pause-off.png", Texture.class);
-        manager.load("gui/Pause-on.png", Texture.class);
-
-
-        // Player
-        for (int i = 0; i < 10; i++)
-        {
-            manager.load("player/Idle (" +(i+1)+").png", Texture.class);
-        }
-        for (int i = 0; i < 8; i++)
-        {
-            manager.load("player/Run (" +(i+1)+").png", Texture.class);
-        }
-        for (int i = 0; i < 12; i++)
-        {
-            manager.load("player/Jump (" +(i+1)+").png", Texture.class);
-        }
-        for (int i = 0; i < 10; i++)
-        {
-            manager.load("player/Dead (" +(i+1)+").png", Texture.class);
-        }
-
-        //Dino
-        for (int i = 0; i < 10; i++)
-        {
-            manager.load("dino/Walk (" +(i+1)+").png", Texture.class);
-        }
-        for (int i = 0; i < 8; i++)
-        {
-            manager.load("dino/Dead (" +(i+1)+").png", Texture.class);
-        }
-
-        //PowerUp
-        for (int i = 0; i < 7; i++)
-        {
-            manager.load("powerup/frame000" +i+".png", Texture.class);
-        }
-
-        // Sounds
-        manager.load("sound/music.mp3", Music.class);
-        manager.load("sound/loselife.wav", Sound.class);
-        manager.load("sound/kill.wav", Sound.class);
-        manager.load("sound/jump.wav", Sound.class);
-        manager.load("sound/powerup.wav", Sound.class);
-        manager.load("sound/levelcomplete.wav", Sound.class);
-
-        manager.update();
-
-        manager.finishLoading();
-    }
 
 	@Override
 	public void render () {
