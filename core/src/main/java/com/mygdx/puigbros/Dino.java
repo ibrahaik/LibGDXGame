@@ -12,11 +12,13 @@ public class Dino extends WalkingCharacter
 
     static final float RUN_SPEED = 120f;
     static final float RUN_ACCELERATION = 200f;
-    static final float UPDATE_DISTANCE = 500f;
+    static final float DISCOVER_DISTANCE = 500f;
 
     AssetManager manager;
     Texture currentFrame;
     Player player;
+
+    boolean discovered;
 
     float animationFrame = 0;
 
@@ -27,12 +29,14 @@ public class Dino extends WalkingCharacter
         this.player = player;
         currentFrame = manager.get("dino/Walk (1).png", Texture.class);
         lookLeft = true;
+        discovered = false;
     }
 
     @Override
     public void act(float delta) {
 
-        if(Math.abs(player.getX() - getX()) > UPDATE_DISTANCE) return;
+        if(Math.abs(player.getX() - getX()) < DISCOVER_DISTANCE) discovered = true;
+        if(!discovered) return;
 
         super.act(delta);
 
@@ -103,6 +107,7 @@ public class Dino extends WalkingCharacter
     @Override
     public void kill() {
         super.kill();
+        animationFrame = 0f;
         manager.get("sound/kill.wav", Sound.class).play();
     }
 

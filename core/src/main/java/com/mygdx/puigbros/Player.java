@@ -164,6 +164,15 @@ public class Player extends WalkingCharacter
     public void jump(float strength)
     {
         speed.y = JUMP_IMPULSE * strength;
+
+        if(joypad.isPressed("Right"))
+        {
+            speed.x = RUN_SPEED * 05f;
+        }
+        else if (joypad.isPressed("Left"))
+        {
+            speed.x = -RUN_SPEED * 05f;
+        }
     }
 
     @Override
