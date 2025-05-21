@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -73,14 +74,15 @@ public class GameScreen implements Screen {
         for(int i = 0; i < l.getEnemies().size(); i++)
         {
             EnemyJson e = l.getEnemies().get(i);
-            if(e.getType().equals("Dino"))
+            if(e.getType().equals("Goblin"))
             {
-                Dino d = new Dino(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE, game.manager, player);
-                d.setMap(tileMap);
-                enemies.add(d);
-                stage.addActor(d);
+                Goblin g = new Goblin(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE, game.manager, player);
+                g.setMap(tileMap);
+                enemies.add(g);
+                stage.addActor(g);
             }
         }
+
 
         // Init collectibles from json level file
         for(int i = 0; i < l.getCollectables().size(); i++)
@@ -97,8 +99,8 @@ public class GameScreen implements Screen {
 
         paused = false;
 
-        game.manager.get("sound/music.mp3", Music.class).play();
-        game.manager.get("sound/music.mp3", Music.class).setLooping(true);
+       // game.manager.get("sound/music.mp3", Music.class).play();
+       // game.manager.get("sound/music.mp3", Music.class).setLooping(true);
 
     }
 
@@ -115,15 +117,17 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(Color.SKY);
-
-        // Draw tile map and background
+// Draw tile map and background
         tileMap.render();
 
-        // Bounding box draw =======================================
-        /*player.drawDebug(game.shapeRenderer);
+// Dibuja las hitboxes (solo para debug)
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        player.drawDebug(game.shapeRenderer);
         for (int i = 0; i < enemies.size(); i++)
-            enemies.get(i).drawDebug(game.shapeRenderer);*/
-        // =========================================================
+            enemies.get(i).drawDebug(game.shapeRenderer);
+        game.shapeRenderer.end();
+
+
 
         // Draw stage: player, enemies and collectibles
         stage.draw();
@@ -138,7 +142,7 @@ public class GameScreen implements Screen {
             // Draw GUI
             joypad.render(game.batch, game.textBatch);
             game.textBatch.begin();
-            game.mediumFont.draw(game.textBatch, "Vides: " + game.lives, 40,460);
+            game.mediumFont.draw(game.textBatch, "Vida: " + player.getHealth() + "/4", 40, 460);
             // Debug touch pointers
             /*for(Integer i : joypad.pointers.keySet())
             {
@@ -192,6 +196,8 @@ public class GameScreen implements Screen {
         // Collision player - enemies
         Rectangle rect_player = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
+
+
         for (int i = 0; i < enemies.size(); i++)
         {
             Actor enemy = enemies.get(i);
@@ -199,23 +205,29 @@ public class GameScreen implements Screen {
             WalkingCharacter wc = (WalkingCharacter) enemy;
 
             if (!player.isDead() && !wc.isDead()) {
-                if (rect_enemy.overlaps(rect_player)) {
-                    if(player.hasInvulnerability()) {
-                      // Kill enemies if invulnerable
-                      wc.kill();
+                Rectangle enemyRect = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+
+                // Golpe con espada
+                Rectangle slashHitbox = player.getSlashHitbox();
+                if (player.isInAttackFrame() && slashHitbox != null && enemyRect.overlaps(slashHitbox)) {
+                    wc.kill();
+                }
+
+                // Colisión directa con el jugador
+                else if (enemyRect.overlaps(rect_player)) {
+                    if (player.hasInvulnerability()) {
+                        wc.kill();
                     } else if (player.getY() + player.getHeight()*0.5f < wc.getY() - wc.getHeight()*0.25f &&
                         player.isFalling() && player.getSpeed().y > 0.f) {
-                        // Kill enemies by jumping over them
                         player.jump(0.5f);
                         wc.kill();
                     } else {
-                        // Lose a life
-                        game.manager.get("sound/music.mp3", Music.class).stop();
-                        game.manager.get("sound/loselife.wav", Sound.class).play();
-                        player.kill();
+                        player.takeDamage();
                     }
                 }
             }
+
+
         }
 
         // Pick up collectables
@@ -236,8 +248,8 @@ public class GameScreen implements Screen {
 
         // Lose life
         if (player.isDead() && player.getAnimationFrame() >= 25.f) {
-            game.lives--;
-            if (game.lives <= 0) {
+            game.playerHealth--;
+            if (game.playerHealth <= 0) {
                 this.dispose();
                 game.setScreen(new MainMenuScreen(game));
             } else {
@@ -245,6 +257,7 @@ public class GameScreen implements Screen {
                 game.setScreen(new GameScreen(game));
             }
         }
+
 
         // Complete level
         if(player.getX() >= tileMap.width * tileMap.TILE_SIZE)

@@ -1,22 +1,22 @@
 {
   enemies: [
     {
-      type: Dino
+      type: Goblin
       x: 17
       y: 1
     }
     {
-      type: Dino
+      type: Goblin
       x: 20
       y: 1
     }
     {
-      type: Dino
+      type: Goblin
       x: 36
       y: 1
     }
     {
-      type: Dino
+      type: Goblin
       x: 49
       y: 1
     }

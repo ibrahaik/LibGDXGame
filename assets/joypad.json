@@ -1,40 +1,49 @@
 {
-  "buttons" : [
+  "buttons": [
     {
-      x: 700
-      y: 40
-      width: 120
-      height: 120,
-      action: Pause
-      image_on: "guiV2/pausaon.png",
-      image_off: "guiV2/pausaoff.png"
+      "x": 500,
+      "y": 40,
+      "width": 120,
+      "height": 120,
+      "action": "Pause",
+      "image_on": "guiV2/pausaon.png",
+      "image_off": "guiV2/pausaoff.png"
     },
     {
-      x: 40
-      y: 360
-      width: 80
-      height: 80,
-      action: Left
-      image_on: "guiV2/derechaon.png",
-      image_off: "guiV2/derechaoff.png"
+      "x": 40,
+      "y": 360,
+      "width": 80,
+      "height": 80,
+      "action": "Left",
+      "image_on": "guiV2/izquierdaon.png",
+      "image_off": "guiV2/izquierdaoff.png"
     },
     {
-      x: 160
-      y: 360
-      width: 80
-      height: 80
-      action: Right
-      image_on: "guiV2/izquierdaon.png",
-      image_off: "guiV2/izquierdaoff.png"
+      "x": 160,
+      "y": 360,
+      "width": 80,
+      "height": 80,
+      "action": "Right",
+      "image_on": "guiV2/button_xbox_digital_a_6.png",
+      "image_off": "guiV2/button_xbox_digital_a_4.png"
     },
     {
-      x: 660
-      y: 360
-      width: 80
-      height: 80
-      action: Jump
-      image_on: "guiV2/xboxoff.png",
-      image_off: "guiV2/xboxon.png"
+      "x": 660,
+      "y": 360,
+      "width": 80,
+      "height": 80,
+      "action": "Jump",
+      "image_on": "guiV2/xboxoff.png",
+      "image_off": "guiV2/xboxon.png"
+    },
+    {
+      "x": 550,
+      "y": 360,
+      "width": 80,
+      "height": 80,
+      "action": "Slash",
+      "image_on": "guiV2/derechaon.png",
+      "image_off": "guiV2/derechaoff.png"
     }
   ]
 }

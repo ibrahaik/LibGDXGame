@@ -42,7 +42,7 @@ public class MainMenuScreen implements Screen
         // Start the game!
         if(mainMenu.consumeRelease("Start"))
         {
-            game.lives = 3;
+            game.playerHealth = 4;
             game.setScreen(new GameScreen(game));
             this.dispose();
         }

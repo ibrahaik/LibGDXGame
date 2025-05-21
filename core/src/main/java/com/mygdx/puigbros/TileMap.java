@@ -89,7 +89,7 @@ public class TileMap {
         batch.end();
     }
 
-    boolean isSolid(int x, int y)
+    public boolean isSolid(int x, int y)
     {
         int mapX = x / TILE_SIZE;
         int mapY = y / TILE_SIZE;

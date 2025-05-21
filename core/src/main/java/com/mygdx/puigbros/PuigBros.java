@@ -21,7 +21,7 @@ public class PuigBros extends Game
 	public OrthographicCamera camera, textCamera;
     AssetManager manager;
 
-    int lives;
+    public int playerHealth = 4;
 
 
 	@Override

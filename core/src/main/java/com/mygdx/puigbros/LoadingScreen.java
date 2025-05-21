@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import jdk.tools.jmod.Main;
 
 public class LoadingScreen implements Screen {
 
@@ -41,6 +40,9 @@ public class LoadingScreen implements Screen {
         manager.load("guiV2/pausaon.png", Texture.class);
         manager.load("guiV2/xboxoff.png", Texture.class);
         manager.load("guiV2/xboxon.png", Texture.class);
+        manager.load("guiV2/button_xbox_digital_a_4.png", Texture.class);
+        manager.load("guiV2/button_xbox_digital_a_6.png", Texture.class);
+
 
 
         // Player
@@ -70,15 +72,23 @@ public class LoadingScreen implements Screen {
             String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
             manager.load("player/Valkyria/Dying/0_Valkyrie_Dying_" + numberStr + ".png", Texture.class);        }
 
-        //Dino
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 12; i++)
         {
-            manager.load("dino/Walk (" +(i+1)+").png", Texture.class);
-        }
-        for (int i = 0; i < 8; i++)
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("player/Valkyria/slashing/0_Valkyrie_Slashing_" + numberStr + ".png", Texture.class);        }
+
+        // Goblin
+
+        for (int i = 0; i < 24; i++)
         {
-            manager.load("dino/Dead (" +(i+1)+").png", Texture.class);
-        }
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/goblin/walking/0_Goblin_Walking_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 15; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/goblin/dying/0_Goblin_Dying_" + numberStr + ".png", Texture.class);        }
+
 
         //PowerUp
         for (int i = 0; i < 7; i++)
@@ -93,6 +103,8 @@ public class LoadingScreen implements Screen {
         manager.load("sound/jump.wav", Sound.class);
         manager.load("sound/powerup.wav", Sound.class);
         manager.load("sound/levelcomplete.wav", Sound.class);
+        manager.load("sound/hit-flesh-01-266311.wav", Sound.class);
+        manager.load("sound/sword-hit-7160.wav", Sound.class);
 
         loadProgress = 0f;
     }

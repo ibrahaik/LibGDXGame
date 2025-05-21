@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Player extends WalkingCharacter
 {
@@ -27,9 +28,20 @@ public class Player extends WalkingCharacter
     float animationFrame = 0;
     float invulnerability = 0f;
 
+    boolean slashing = false;
+    float slashingFrame = 0;
+    float slashingCooldown = 0;
+    static final float SLASH_COOLDOWN_TIME = 0.5f;
+
+    int health = 4;
+    boolean recentlyHit = false;
+    float hitCooldown = 0f;
+    static final float HIT_COOLDOWN_TIME = 1f;
+
     public Player(AssetManager manager)
     {
-        setBounds(400,40,48, 112);
+
+        setBounds(400,40,20, 100);
         this.manager = manager;
         currentFrame = manager.get("player/Idle (1).png", Texture.class);
         invulnerability = 0.f;
@@ -60,6 +72,23 @@ public class Player extends WalkingCharacter
             setX(getWidth() / 2);
         }
 
+        if (slashingCooldown > 0) slashingCooldown -= delta;
+
+        if (joypad.consumePush("Slash") && !slashing && !falling && slashingCooldown <= 0) {
+            slashing = true;
+            slashingFrame = 0;
+            slashingCooldown = SLASH_COOLDOWN_TIME;
+            manager.get("sound/sword-hit-7160.wav", Sound.class).play(1.0f);
+        }
+
+
+        if (recentlyHit) {
+            hitCooldown -= delta;
+            if (hitCooldown <= 0) {
+                recentlyHit = false;
+            }
+        }
+
         if(dead)
         {
             animationFrame += 10.f*delta;
@@ -72,6 +101,16 @@ public class Player extends WalkingCharacter
             currentFrame = manager.get("player/Valkyria/Dying/0_Valkyrie_Dying_" + frameStr + ".png", Texture.class);
 
             speed.x = 0f;
+        }  else if(slashing)
+        {
+            slashingFrame += 45 * delta;
+            if(slashingFrame >= 12) {
+                slashingFrame = 0;
+                slashing = false;
+            }
+            int frame = (int) slashingFrame;
+            String frameStr = String.format("%03d", frame);
+            currentFrame = manager.get("player/Valkyria/slashing/0_Valkyrie_Slashing_" + frameStr + ".png", Texture.class);
         }
 
         else
@@ -197,6 +236,40 @@ public class Player extends WalkingCharacter
         }
     }
 
+    public boolean isSlashing() {
+        return slashing;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public Rectangle getSlashHitbox() {
+        if (!slashing) return null;
+
+        float slashWidth = 60;
+        float slashHeight = 80;
+        float xOffset = lookLeft ? -getWidth() / 2 - slashWidth : getWidth() / 2;
+        return new Rectangle(getX() + xOffset, getY() - slashHeight / 2, slashWidth, slashHeight);
+    }
+
+    public boolean isInAttackFrame() {
+        return slashing && slashingFrame >= 4 && slashingFrame <= 8;
+    }
+
+
+    public void takeDamage() {
+        if (!recentlyHit && !dead && invulnerability <= 0.f) {
+            health--;
+            hitCooldown = HIT_COOLDOWN_TIME;
+            recentlyHit = true;
+
+            if (health <= 0) {
+                kill(); // Ejecuta la animación de muerte
+            }
+        }
+    }
+
     public void jump(float strength)
     {
         speed.y = JUMP_IMPULSE * strength;
@@ -247,12 +320,21 @@ public class Player extends WalkingCharacter
     }
 
     // Draw collision box
+    @Override
     public void drawDebug(ShapeRenderer shapes) {
-        //super.drawDebug(shapes);
-
-        shapes.begin(ShapeRenderer.ShapeType.Filled);
+        // Dibuja el cuerpo del jugador (opcional)
         shapes.setColor(Color.NAVY);
-        shapes.rect(getX() - getWidth()*0.5f - map.scrollX, getY() - getHeight()*0.5f, getWidth(), getHeight());
-        shapes.end();
+        shapes.rect(getX() - getWidth() * 0.5f - map.scrollX, getY() - getHeight() * 0.5f, getWidth(), getHeight());
+
+        // Dibuja la hitbox del ataque
+        if (slashing) {
+            Rectangle hitbox = getSlashHitbox();
+            if (hitbox != null) {
+                shapes.setColor(Color.RED);
+                shapes.rect(hitbox.x - map.scrollX, hitbox.y, hitbox.width, hitbox.height);
+            }
+        }
     }
 }
+
+
