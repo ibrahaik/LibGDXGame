@@ -3,11 +3,11 @@
     {
       x: 700
       y: 40
-      width: 80
-      height: 80,
+      width: 120
+      height: 120,
       action: Pause
-      image_on: "gui/Pause-on.png",
-      image_off: "gui/Pause-off.png"
+      image_on: "guiV2/pausaon.png",
+      image_off: "guiV2/pausaoff.png"
     },
     {
       x: 40
@@ -15,8 +15,8 @@
       width: 80
       height: 80,
       action: Left
-      image_on: "gui/Left-on.png",
-      image_off: "gui/Left-off.png"
+      image_on: "guiV2/derechaon.png",
+      image_off: "guiV2/derechaoff.png"
     },
     {
       x: 160
@@ -24,8 +24,8 @@
       width: 80
       height: 80
       action: Right
-      image_on: "gui/Right-on.png",
-      image_off: "gui/Right-off.png"
+      image_on: "guiV2/izquierdaon.png",
+      image_off: "guiV2/izquierdaoff.png"
     },
     {
       x: 660
@@ -33,8 +33,8 @@
       width: 80
       height: 80
       action: Jump
-      image_on: "gui/Jump-on.png",
-      image_off: "gui/Jump-off.png"
+      image_on: "guiV2/xboxoff.png",
+      image_off: "guiV2/xboxon.png"
     }
   ]
 }

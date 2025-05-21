@@ -33,14 +33,14 @@ public class LoadingScreen implements Screen {
         //GUI
         manager.load("gui/Button-off.png", Texture.class);
         manager.load("gui/Button-on.png", Texture.class);
-        manager.load("gui/Left-off.png", Texture.class);
-        manager.load("gui/Left-on.png", Texture.class);
-        manager.load("gui/Right-off.png", Texture.class);
-        manager.load("gui/Right-on.png", Texture.class);
-        manager.load("gui/Jump-off.png", Texture.class);
-        manager.load("gui/Jump-on.png", Texture.class);
-        manager.load("gui/Pause-off.png", Texture.class);
-        manager.load("gui/Pause-on.png", Texture.class);
+        manager.load("guiV2/izquierdaon.png", Texture.class);
+        manager.load("guiV2/izquierdaoff.png", Texture.class);
+        manager.load("guiV2/derechaon.png", Texture.class);
+        manager.load("guiV2/derechaoff.png", Texture.class);
+        manager.load("guiV2/pausaoff.png", Texture.class);
+        manager.load("guiV2/pausaon.png", Texture.class);
+        manager.load("guiV2/xboxoff.png", Texture.class);
+        manager.load("guiV2/xboxon.png", Texture.class);
 
 
         // Player
@@ -48,18 +48,27 @@ public class LoadingScreen implements Screen {
         {
             manager.load("player/Idle (" +(i+1)+").png", Texture.class);
         }
-        for (int i = 0; i < 8; i++)
-        {
-            manager.load("player/Run (" +(i+1)+").png", Texture.class);
+        for (int i = 0; i < 12; i++) {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("player/Valkyria/running/0_Valkyrie_Running_" + numberStr + ".png", Texture.class);
         }
-        for (int i = 0; i < 12; i++)
+
+        for (int i = 0; i < 6; i++)
         {
-            manager.load("player/Jump (" +(i+1)+").png", Texture.class);
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("player/Valkyria/jumpingLoop/0_Valkyrie_Jump Loop_" + numberStr + ".png", Texture.class);
         }
-        for (int i = 0; i < 10; i++)
+
+        for (int i = 0; i < 6; i++)
         {
-            manager.load("player/Dead (" +(i+1)+").png", Texture.class);
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("player/Valkyria/jumpingStart/0_Valkyrie_Jump Start_" + numberStr + ".png", Texture.class);
         }
+
+        for (int i = 0; i < 15; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("player/Valkyria/Dying/0_Valkyrie_Dying_" + numberStr + ".png", Texture.class);        }
 
         //Dino
         for (int i = 0; i < 10; i++)

@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Player extends WalkingCharacter
 {
 
+    boolean canDoubleJump = true;
+    boolean groundedLastFrame = false;
     static final float JUMP_IMPULSE = -600f;
-    static final float RUN_SPEED = 240f;
-    static final float BRAKE_SPEED = 120f;
-    static final float STOP_SPEED = 5f;
-    static final float RUN_ACCELERATION = 200f;
+    static final float RUN_SPEED = 300f;
+    static final float BRAKE_SPEED = 600F;
+    static final float STOP_SPEED = 30f;
+    static final float RUN_ACCELERATION = 1000f;
     static final float INVULNERABILITY_DURATION = 20f;
 
     AssetManager manager;
@@ -40,6 +42,12 @@ public class Player extends WalkingCharacter
     public void act(float delta) {
         super.act(delta);
 
+        // Detectar si acaba de aterrizar
+        if (!falling && groundedLastFrame == false) {
+            canDoubleJump = true;
+        }
+        groundedLastFrame = !falling; // Actualiza estado para el siguiente frame
+
         // Fall too low
         if(getY() > map.height * TileMap.TILE_SIZE)
         {
@@ -54,15 +62,18 @@ public class Player extends WalkingCharacter
 
         if(dead)
         {
-            // Death animation
             animationFrame += 10.f*delta;
-            int frameTexture = (int)animationFrame+1;
-            if(frameTexture > 10)
-                frameTexture = 10;
-            currentFrame = manager.get("player/Dead ("+frameTexture+").png", Texture.class);
+            int frameTexture = (int)animationFrame;
+            if(frameTexture >= 15)  // Ahora 15 frames
+                frameTexture = 14;   // Último frame es 14 (índice base 0)
+
+            String frameStr = String.format("%03d", frameTexture);
+
+            currentFrame = manager.get("player/Valkyria/Dying/0_Valkyrie_Dying_" + frameStr + ".png", Texture.class);
 
             speed.x = 0f;
         }
+
         else
         {
             // Reduce remaining invulnerability
@@ -71,23 +82,37 @@ public class Player extends WalkingCharacter
 
             if(falling)
             {
+                int frameNum;
+                String frameStr;
+
                 if(speed.y < 0)
                 {
-                    // Start jumping
+                    // Inicio del salto (subiendo)
+                    // Calcula frame entre 0 y 5 para jumpingStart
                     float base_impulse = -JUMP_IMPULSE;
                     float current_impulse = -speed.y;
                     animationFrame = 0 + ((base_impulse - current_impulse) / 32);
-                    if (animationFrame > 8) animationFrame = 8;
+                    if(animationFrame > 5) animationFrame = 5;
+                    if(animationFrame < 0) animationFrame = 0;
+
+                    frameNum = (int) animationFrame;
+                    frameStr = String.format("%03d", frameNum);
+                    currentFrame = manager.get("player/Valkyria/jumpingStart/0_Valkyrie_Jump Start_" + frameStr + ".png", Texture.class);
                 }
                 else
                 {
-                    // Start falling
-                    animationFrame = 9 + (speed.y / 64);
-                    if (animationFrame > 11) animationFrame = 11;
-                }
-                currentFrame = manager.get("player/Jump ("+(int)(animationFrame+1)+").png", Texture.class);
+                    // Caída (bajando)
+                    // Cicla frame entre 0 y 5 para jumpingLoop
+                    animationFrame += 10 * delta;
+                    if(animationFrame > 5) animationFrame = 0;
+                    if(animationFrame < 0) animationFrame = 0;
 
+                    frameNum = (int) animationFrame;
+                    frameStr = String.format("%03d", frameNum);
+                    currentFrame = manager.get("player/Valkyria/jumpingLoop/0_Valkyrie_Jump Loop_" + frameStr + ".png", Texture.class);
+                }
             }
+
             else if((speed.x < 0.1f && speed.x > -0.1f))
             {
                 // Idle
@@ -100,17 +125,28 @@ public class Player extends WalkingCharacter
             {
                 // Walk
                 animationFrame += 10 * delta;
-                if (animationFrame >= 8.f) animationFrame -= 8.f;
-                currentFrame = manager.get("player/Run ("+(int)(animationFrame+1)+").png", Texture.class);
+                if (animationFrame >= 12.f) animationFrame -= 12.f;
+
+                int frameNum = (int) animationFrame;
+                String frameStr = String.format("%03d", frameNum);
+                currentFrame = manager.get("player/Valkyria/running/0_Valkyrie_Running_" + frameStr + ".png", Texture.class);
+
 
             }
 
-            if(!falling && joypad.consumePush("Jump"))
-            {
-                // Jump
-                jump(1.f);
-                manager.get("sound/jump.wav", Sound.class).play();
+            if (joypad.consumePush("Jump")) {
+                if (!falling) {
+                    // Salto normal
+                    jump(1.f);
+                    manager.get("sound/jump.wav", Sound.class).play();
+                } else if (canDoubleJump) {
+                    // Doble salto en el aire
+                    jump(1.f);
+                    canDoubleJump = false;
+                    manager.get("sound/jump.wav", Sound.class).play();
+                }
             }
+
 
             if(!falling)
             {
