@@ -127,6 +127,13 @@ public class TileMap {
         }
     }
 
+    public int getTile(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return 0; // Fuera de límites = tile vacío
+        }
+        return tiles[y][x]; // Recuerda: primero Y, luego X
+    }
+
     int nearestCeiling(int x, int y)
     {
         int mapX = x / TILE_SIZE;

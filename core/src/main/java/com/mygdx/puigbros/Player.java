@@ -54,6 +54,15 @@ public class Player extends WalkingCharacter
     public void act(float delta) {
         super.act(delta);
 
+        // Detectar colisión con tiles peligrosos (17 o 18)
+        int tileX = (int) (getX() / TileMap.TILE_SIZE);
+        int tileY = (int) (getY() / TileMap.TILE_SIZE);
+        int tileId = map.getTile(tileX, tileY);
+        if (tileId == 17 || tileId == 18) {
+            kill();
+        }
+
+
         // Detectar si acaba de aterrizar
         if (!falling && groundedLastFrame == false) {
             canDoubleJump = true;
@@ -296,6 +305,7 @@ public class Player extends WalkingCharacter
         if(!dead) {
             super.kill();
             animationFrame = 0;
+            manager.get("sound/death.wav", Sound.class).play();
         }
     }
 

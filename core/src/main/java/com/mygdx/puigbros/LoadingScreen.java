@@ -89,6 +89,22 @@ public class LoadingScreen implements Screen {
             String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
             manager.load("enemies/goblin/dying/0_Goblin_Dying_" + numberStr + ".png", Texture.class);        }
 
+       // Ogre
+
+        for (int i = 0; i < 15; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/ogre/dying/0_Ogre_Dying_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/ogre/slashing/0_Ogre_Slashing_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 24; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/ogre/walking/0_Ogre_Walking_" + numberStr + ".png", Texture.class);        }
 
         //PowerUp
         for (int i = 0; i < 7; i++)
@@ -106,6 +122,7 @@ public class LoadingScreen implements Screen {
         manager.load("sound/hit-flesh-01-266311.wav", Sound.class);
         manager.load("sound/sword-hit-7160.wav", Sound.class);
         manager.load("sound/hurt.wav", Sound.class);
+        manager.load("sound/death.wav", Sound.class);
 
         loadProgress = 0f;
     }
