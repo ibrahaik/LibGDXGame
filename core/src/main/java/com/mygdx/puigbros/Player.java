@@ -173,7 +173,7 @@ public class Player extends WalkingCharacter
             if (joypad.consumePush("Jump")) {
                 if (!falling) {
                     // Salto normal
-                    jump(1.f);
+                    jump(0.5f);
                     manager.get("sound/jump.wav", Sound.class).play();
                 } else if (canDoubleJump) {
                     // Doble salto en el aire
