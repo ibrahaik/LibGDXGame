@@ -61,10 +61,7 @@ public class Player extends WalkingCharacter
         groundedLastFrame = !falling; // Actualiza estado para el siguiente frame
 
         // Fall too low
-        if(getY() > map.height * TileMap.TILE_SIZE)
-        {
-            kill();
-        }
+
 
         // Left bounds of the level
         if(getX() < getWidth() / 2)
@@ -264,10 +261,19 @@ public class Player extends WalkingCharacter
             hitCooldown = HIT_COOLDOWN_TIME;
             recentlyHit = true;
 
+            manager.get("sound/hurt.wav", Sound.class).play();
+
+            // Mini salto al recibir daño
+            jumpSilently(0.4f); // Puedes ajustar la fuerza
             if (health <= 0) {
                 kill(); // Ejecuta la animación de muerte
             }
         }
+    }
+
+    public void jumpSilently(float scale)
+    {
+        speed.y = JUMP_IMPULSE * scale;
     }
 
     public void jump(float strength)
@@ -312,12 +318,17 @@ public class Player extends WalkingCharacter
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        // Blink effect when invulnerable
-        if(invulnerability > 0.f && (int)(invulnerability/0.125f)%2 == 0)
-            return;
+        // Parpadeo cuando ha sido golpeado recientemente
+        if (recentlyHit) {
+            float t = (hitCooldown * 10) % 2; // parpadeo rápido (10 flashes por segundo)
+            if (t >= 1) return; // invisible en los frames alternos
+        }
 
-        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookLeft ? 28 : 50), getY() - getHeight()*0.5f, 128, 128, 0, 0, 669, 569, lookLeft, true);
+        batch.draw(currentFrame, getX() - getWidth()*0.5f - map.scrollX - (lookLeft ? 28 : 50),
+            getY() - getHeight()*0.5f,
+            128, 128, 0, 0, 669, 569, lookLeft, true);
     }
+
 
     // Draw collision box
     @Override

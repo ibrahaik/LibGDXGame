@@ -105,6 +105,7 @@ public class LoadingScreen implements Screen {
         manager.load("sound/levelcomplete.wav", Sound.class);
         manager.load("sound/hit-flesh-01-266311.wav", Sound.class);
         manager.load("sound/sword-hit-7160.wav", Sound.class);
+        manager.load("sound/hurt.wav", Sound.class);
 
         loadProgress = 0f;
     }
