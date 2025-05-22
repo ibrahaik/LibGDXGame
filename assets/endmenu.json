@@ -1,14 +1,14 @@
 {
   "buttons": [
     {
-      x: 200
-      y: 160
-      width: 400
-      height: 200
+      x: 300
+      y: 320
+      width: 200
+      height: 100
       action: Menu
       "text": "Menu"
-      "image_on": "gui/Button-on.png"
-      "image_off": "gui/Button-off.png"
+      "image_on": "guiV2/Bottons/Rect/bottonon.png"
+      "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     }
   ]
 }

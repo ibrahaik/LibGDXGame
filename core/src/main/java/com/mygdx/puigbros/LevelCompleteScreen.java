@@ -31,12 +31,11 @@ public class LevelCompleteScreen implements Screen {
         game.textBatch.setProjectionMatrix(game.textCamera.combined);
 
         game.batch.begin();
-        game.batch.draw(game.manager.get("BG.png", Texture.class), 0, 0, 800, 480, 0,0, 1000, 750, false, true);
+        game.batch.draw(game.manager.get("guiV2/Winner/winner.png", Texture.class), 0, 0, 1300, 840, 0,0, 1000, 750, false, true);
         game.batch.end();
 
         game.textBatch.begin();
-        game.bigFont.draw(game.textBatch,"ENHORABONA!", 100, 480 - 60);
-        game.smallFont.draw(game.textBatch,"Ara crea el teu propi joc!", 120, 480 - 420);
+        game.bigFont.draw(game.textBatch,"ENHORABONA!", 500, 1440 - 60);
         game.textBatch.end();
 
         endMenu.render(game.batch, game.textBatch);

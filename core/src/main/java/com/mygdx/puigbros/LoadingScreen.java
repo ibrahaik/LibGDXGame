@@ -15,6 +15,8 @@ public class LoadingScreen implements Screen {
     PuigBros game;
     float loadProgress;
 
+
+
     LoadingScreen(PuigBros game)
     {
         this.game = game;
@@ -47,6 +49,7 @@ public class LoadingScreen implements Screen {
         manager.load("guiV2/Bottons/Start/starton.png", Texture.class);
         manager.load("guiV2/Bottons/Rect/bottonoff.png", Texture.class);
         manager.load("guiV2/Bottons/Rect/bottonon.png", Texture.class);
+        manager.load("guiV2/Winner/winner.png", Texture.class);
 
 
         // Player
