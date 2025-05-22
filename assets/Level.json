@@ -1,6 +1,10 @@
 {
   enemies: [
-
+    {
+      type: Orco
+      x: 17
+      y: 1
+    }
   ],
   collectables: [
     {

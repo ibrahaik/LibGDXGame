@@ -106,6 +106,28 @@ public class LoadingScreen implements Screen {
             String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
             manager.load("enemies/ogre/walking/0_Ogre_Walking_" + numberStr + ".png", Texture.class);        }
 
+        // Orco
+
+        for (int i = 0; i < 15; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/dying/0_Orc_Dying_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/runSlashing/0_Orc_Run Slashing_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/slashing/0_Orc_Slashing_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 24; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/walking/0_Orc_Walking_" + numberStr + ".png", Texture.class);        }
+
         //PowerUp
         for (int i = 0; i < 7; i++)
         {
