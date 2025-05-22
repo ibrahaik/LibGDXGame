@@ -1,14 +1,13 @@
 {
   "buttons": [
     {
-      x: 200
-      y: 160
-      width: 400
-      height: 200
+      x: 250
+      y: 200
+      width: 300
+      height: 150
       action: Start
-      "text": "Jugar!"
-      "image_on": "gui/Button-on.png"
-      "image_off": "gui/Button-off.png"
+      "image_on": "guiV2/Bottons/Start/startoff.png"
+      "image_off": "guiV2/Bottons/Start/starton.png"
     }
   ]
 }

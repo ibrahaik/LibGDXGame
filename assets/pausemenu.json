@@ -6,9 +6,9 @@
       width: 400
       height: 120
       action: Resume
-      "text": "Continua"
-      "image_on": "gui/Button-on.png"
-      "image_off": "gui/Button-off.png"
+      "text": "Continua",
+      "image_on": "guiV2/Bottons/Rect/bottonon.png",
+      "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     },
     {
       x: 200
@@ -16,9 +16,9 @@
       width: 400
       height: 120
       action: Quit
-      "text": "Surt"
-      "image_on": "gui/Button-on.png"
-      "image_off": "gui/Button-off.png"
+      "text": "Surt",
+      "image_on": "guiV2/Bottons/Rect/bottonon.png",
+      "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     }
   ]
 }

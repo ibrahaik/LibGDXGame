@@ -42,7 +42,11 @@ public class LoadingScreen implements Screen {
         manager.load("guiV2/xboxon.png", Texture.class);
         manager.load("guiV2/button_xbox_digital_a_4.png", Texture.class);
         manager.load("guiV2/button_xbox_digital_a_6.png", Texture.class);
-
+        manager.load("guiV2/mainmenu/backgroundPC.png", Texture.class);
+        manager.load("guiV2/Bottons/Start/startoff.png", Texture.class);
+        manager.load("guiV2/Bottons/Start/starton.png", Texture.class);
+        manager.load("guiV2/Bottons/Rect/bottonoff.png", Texture.class);
+        manager.load("guiV2/Bottons/Rect/bottonon.png", Texture.class);
 
 
         // Player
@@ -105,6 +109,28 @@ public class LoadingScreen implements Screen {
         {
             String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
             manager.load("enemies/ogre/walking/0_Ogre_Walking_" + numberStr + ".png", Texture.class);        }
+
+        // Orco
+
+        for (int i = 0; i < 15; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/dying/0_Orc_Dying_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/runSlashing/0_Orc_Run Slashing_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/slashing/0_Orc_Slashing_" + numberStr + ".png", Texture.class);        }
+
+        for (int i = 0; i < 24; i++)
+        {
+            String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
+            manager.load("enemies/orco/walking/0_Orc_Walking_" + numberStr + ".png", Texture.class);        }
 
         //PowerUp
         for (int i = 0; i < 7; i++)

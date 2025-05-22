@@ -51,6 +51,7 @@ public class GameScreen implements Screen {
         // Init game entities
         stage = new Stage();
         player = new Player(game.manager);
+        player.setShapeRenderer(game.shapeRenderer);
         enemies = new ArrayList<>();
         collectables = new ArrayList<>();
         player.setMap(tileMap);
@@ -80,7 +81,19 @@ public class GameScreen implements Screen {
                 g.setMap(tileMap);
                 enemies.add(g);
                 stage.addActor(g);
+            } else if(e.getType().equals("Ogre")) {
+                Ogre ogre = new Ogre(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE, game.manager, player);
+                ogre.setMap(tileMap);
+                enemies.add(ogre);
+                stage.addActor(ogre);
+            } else if (e.getType().equals("Orco")) {
+                Orco orco = new Orco(e.getX() * tileMap.TILE_SIZE, e.getY() * tileMap.TILE_SIZE, game.manager, player);
+                orco.setMap(tileMap);
+                enemies.add(orco);
+                stage.addActor(orco);
             }
+
+
         }
 
 
@@ -142,7 +155,6 @@ public class GameScreen implements Screen {
             // Draw GUI
             joypad.render(game.batch, game.textBatch);
             game.textBatch.begin();
-            game.mediumFont.draw(game.textBatch, "Vida: " + player.getHealth() + "/4", 40, 460);
             // Debug touch pointers
             /*for(Integer i : joypad.pointers.keySet())
             {
@@ -191,6 +203,7 @@ public class GameScreen implements Screen {
         if (tileMap.scrollX < 0)
             tileMap.scrollX = 0;
         if (tileMap.scrollX >= tileMap.width * tileMap.TILE_SIZE - 800)
+
             tileMap.scrollX = tileMap.width * tileMap.TILE_SIZE - 800 - 1;
 
         // Collision player - enemies
@@ -211,22 +224,32 @@ public class GameScreen implements Screen {
                 Rectangle slashHitbox = player.getSlashHitbox();
                 if (player.isInAttackFrame() && slashHitbox != null && enemyRect.overlaps(slashHitbox)) {
                     wc.kill();
-                }
-
-                // Colisión directa con el jugador
-                else if (enemyRect.overlaps(rect_player)) {
-                    if (player.hasInvulnerability()) {
+                } else if (enemyRect.overlaps(rect_player)) {
+                    if (enemy instanceof Orco) {
+                        Orco orco = (Orco) enemy;
+                        if (orco.isAttacking()) {
+                            player.takeDamage(2);
+                        }
+                    } else if (enemy instanceof Ogre) {
+                        Ogre ogre = (Ogre) enemy;
+                        if (ogre.isAttacking()) {
+                            player.takeDamage(1);
+                        }
+                    } else if (player.hasInvulnerability()) {
                         wc.kill();
-                    } else if (player.getY() + player.getHeight()*0.5f < wc.getY() - wc.getHeight()*0.25f &&
+                    } else if (player.getY() + player.getHeight() * 0.5f < wc.getY() - wc.getHeight() * 0.25f &&
                         player.isFalling() && player.getSpeed().y > 0.f) {
                         player.jump(0.5f);
                         wc.kill();
                     } else {
-                        player.takeDamage();
+                        player.takeDamage(1);
                     }
                 }
-            }
 
+
+
+
+            }
 
         }
 
