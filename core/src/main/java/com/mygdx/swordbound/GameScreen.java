@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
         // Load level from json file
         Json json = new Json();
 
-        FileHandle file = Gdx.files.internal("Level1.json");
+        FileHandle file = Gdx.files.internal(levelFile);
         String scores = file.readString();
         LevelJson l = json.fromJson(LevelJson.class, scores);
         tileMap.loadFromLevel(l);
