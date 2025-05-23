@@ -9,6 +9,15 @@
       "text": "Menu"
       "image_on": "guiV2/Bottons/Rect/bottonon.png"
       "image_off": "guiV2/Bottons/Rect/bottonoff.png"
+    },   {
+      "x": 300,
+      "y": 180,
+      "width": 200,
+      "height": 100,
+      "action": "Next",
+      "text": "Siguiente",
+      "image_on": "guiV2/Bottons/Rect/bottonon.png",
+      "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     }
   ]
 }

@@ -32,10 +32,11 @@ public class GameScreen implements Screen {
     ArrayList<Actor> collectables;
     boolean paused;
 
-
-    public GameScreen(SwordBound game)
+    String currentLevelFile;
+    public GameScreen(SwordBound game, String levelFile)
     {
         this.game = game;
+        this.currentLevelFile = levelFile;
 
         // Pause menu
         pauseMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
@@ -66,7 +67,7 @@ public class GameScreen implements Screen {
         // Load level from json file
         Json json = new Json();
 
-        FileHandle file = Gdx.files.internal("Level.json");
+        FileHandle file = Gdx.files.internal("Level1.json");
         String scores = file.readString();
         LevelJson l = json.fromJson(LevelJson.class, scores);
         tileMap.loadFromLevel(l);
@@ -277,7 +278,7 @@ public class GameScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             } else {
                 this.dispose();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, currentLevelFile));
             }
         }
 
@@ -286,7 +287,7 @@ public class GameScreen implements Screen {
         if(player.getX() >= tileMap.width * tileMap.TILE_SIZE)
         {
             this.dispose();
-            game.setScreen(new LevelCompleteScreen(game));
+            game.setScreen(new LevelCompleteScreen(game, currentLevelFile));
         }
     }
 

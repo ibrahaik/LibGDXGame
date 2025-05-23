@@ -8,9 +8,11 @@ public class LevelCompleteScreen implements Screen {
 
     SwordBound game;
     ButtonLayout endMenu;
-    public LevelCompleteScreen(SwordBound game)
+    String currentLevel;
+    public LevelCompleteScreen(SwordBound game, String currentLevel)
     {
         this.game = game;
+        this.currentLevel = currentLevel;
 
         endMenu = new ButtonLayout(game.camera, game.manager, game.mediumFont);
         endMenu.loadFromJson("endmenu.json");
@@ -44,8 +46,22 @@ public class LevelCompleteScreen implements Screen {
         if(endMenu.consumeRelease("Menu"))
         {
             this.dispose();
-            game.setScreen(new MainMenuScreen(game));
+            String nextLevel = getNextLevel(currentLevel);
+            game.setScreen(new GameScreen(game, nextLevel));
         }
+
+        if(endMenu.consumeRelease("Next"))
+        {
+            this.dispose();
+            String nextLevel = getNextLevel(currentLevel);
+            game.setScreen(new GameScreen(game, nextLevel));
+        }
+    }
+
+    private String getNextLevel(String current) {
+        if (current == null) return "Level2.json"; // fallback de seguridad
+        int levelNumber = Integer.parseInt(current.replaceAll("\\D+", ""));
+        return "Level" + (levelNumber + 1) + ".json";
     }
 
     @Override

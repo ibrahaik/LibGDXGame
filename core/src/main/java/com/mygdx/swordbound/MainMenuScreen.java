@@ -20,6 +20,7 @@ public class MainMenuScreen implements Screen
 
     }
 
+
     @Override
     public void render(float delta) {
 
@@ -42,7 +43,7 @@ public class MainMenuScreen implements Screen
         if(mainMenu.consumeRelease("Start"))
         {
             game.playerHealth = 4;
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new GameScreen(game, "Level1.json"));
             this.dispose();
         }
     }
