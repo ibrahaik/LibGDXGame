@@ -144,11 +144,13 @@ public class LoadingScreen implements Screen {
             String numberStr = String.format("%03d", i); // formato 3 dígitos con ceros a la izquierda
             manager.load("enemies/orco/walking/0_Orc_Walking_" + numberStr + ".png", Texture.class);        }
 
-        //PowerUp
-        for (int i = 0; i < 7; i++)
+        //coin
+        for (int i = 0; i < 4; i++)
         {
             manager.load("powerup/frame000" +i+".png", Texture.class);
         }
+
+
 
         // Sounds
         manager.load("sound/music.mp3", Music.class);
@@ -161,6 +163,7 @@ public class LoadingScreen implements Screen {
         manager.load("sound/sword-hit-7160.wav", Sound.class);
         manager.load("sound/hurt.wav", Sound.class);
         manager.load("sound/death.wav", Sound.class);
+        manager.load("sound/gameover.wav", Sound.class);
 
         loadProgress = 0f;
     }

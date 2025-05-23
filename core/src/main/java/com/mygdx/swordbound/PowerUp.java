@@ -27,7 +27,7 @@ public class PowerUp extends GameEntity {
         super.act(delta);
 
         animationFrame += 4f*delta;
-        if(animationFrame >= 7.f) animationFrame -= 7.f;
+        if(animationFrame >= 4.f) animationFrame -= 4.f;
 
         currentFrame = manager.get("powerup/frame000"+(int)animationFrame+".png", Texture.class);
 

@@ -220,6 +220,8 @@ public class Player extends WalkingCharacter
             super.kill();
             animationFrame = 0;
             manager.get("sound/death.wav", Sound.class).play();
+            manager.get("sound/gameover.wav", Sound.class).play();
+
         }
     }
 

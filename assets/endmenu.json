@@ -1,8 +1,8 @@
 {
   "buttons": [
     {
-      x: 300
-      y: 320
+      x: 200
+      y: 300
       width: 200
       height: 100
       action: Menu
@@ -10,12 +10,12 @@
       "image_on": "guiV2/Bottons/Rect/bottonon.png"
       "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     },   {
-      "x": 300,
-      "y": 180,
+      "x": 400,
+      "y": 300,
       "width": 200,
       "height": 100,
       "action": "Next",
-      "text": "Siguiente",
+      "text": "NEXT",
       "image_on": "guiV2/Bottons/Rect/bottonon.png",
       "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     }
