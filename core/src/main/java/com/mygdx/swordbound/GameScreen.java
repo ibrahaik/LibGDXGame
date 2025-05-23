@@ -98,19 +98,6 @@ public class GameScreen implements Screen {
         }
 
 
-        // Init collectibles from json level file
-        for(int i = 0; i < l.getCollectables().size(); i++)
-        {
-            CollectableJson c = l.getCollectables().get(i);
-            if(c.getType().equals("PowerUp"))
-            {
-                PowerUp p = new PowerUp(c.getX() * tileMap.TILE_SIZE, c.getY() * tileMap.TILE_SIZE, game.manager);
-                p.setMap(tileMap);
-                collectables.add(p);
-                stage.addActor(p);
-            }
-        }
-
         paused = false;
 
        // game.manager.get("sound/music.mp3", Music.class).play();
@@ -131,15 +118,8 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(Color.SKY);
-// Draw tile map and background
         tileMap.render();
 
-// Dibuja las hitboxes (solo para debug)
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        player.drawDebug(game.shapeRenderer);
-        for (int i = 0; i < enemies.size(); i++)
-            enemies.get(i).drawDebug(game.shapeRenderer);
-        game.shapeRenderer.end();
 
 
 
@@ -254,21 +234,7 @@ public class GameScreen implements Screen {
 
         }
 
-        // Pick up collectables
-        for (int i = 0; i < collectables.size(); i++)
-        {
-            Actor collectable = collectables.get(i);
-            Rectangle rect_coll = new Rectangle(collectable.getX(), collectable.getY(), collectable.getWidth(), collectable.getHeight());
 
-            if (rect_coll.overlaps(rect_player))
-            {
-                // Give invulnerability
-                player.getInvulnerability();
-                collectable.remove();
-                collectables.remove(collectable);
-                game.manager.get("sound/powerup.wav", Sound.class).play();
-            }
-        }
 
         // Lose life
         if (player.isDead() && player.getAnimationFrame() >= 25.f) {

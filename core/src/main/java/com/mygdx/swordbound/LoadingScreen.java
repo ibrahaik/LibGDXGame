@@ -185,7 +185,6 @@ public class LoadingScreen implements Screen {
             positionX = 100f;
         }
 
-        // Limpia pantalla
         ScreenUtils.clear(new Color(0.02f, 0.05f, 0.08f, 1));
 
         game.camera.update();
@@ -193,7 +192,6 @@ public class LoadingScreen implements Screen {
         game.textBatch.setProjectionMatrix(game.textCamera.combined);
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
 
-        // Dibuja la animación de Valkyria si está lista
         if (animationReady) {
             animationTime += delta;
             animationSwitchTime += delta;
