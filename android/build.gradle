@@ -9,7 +9,7 @@ apply plugin: 'com.android.application'
 
 
 android {
-  namespace "com.mygdx.puigbros"
+  namespace "com.mygdx.swordbound"
   compileSdk 34
   sourceSets {
     main {

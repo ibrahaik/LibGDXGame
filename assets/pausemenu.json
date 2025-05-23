@@ -6,7 +6,7 @@
       width: 400
       height: 120
       action: Resume
-      "text": "Continua",
+      "text": "Volver",
       "image_on": "guiV2/Bottons/Rect/bottonon.png",
       "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     },
@@ -16,7 +16,7 @@
       width: 400
       height: 120
       action: Quit
-      "text": "Surt",
+      "text": "Rendirse",
       "image_on": "guiV2/Bottons/Rect/bottonon.png",
       "image_off": "guiV2/Bottons/Rect/bottonoff.png"
     }
